@@ -82,7 +82,7 @@ public class MovieController {
         return List.of(1, 2, 3, 4, 5);
     }
 
-    // 2. insert로 이동
+    // 2. 영화 등록 폼으로 insert로 이동
     @GetMapping(value = "movie/insert")
     public String insert(@ModelAttribute("movieBean") MovieBean movieBean,
                          @RequestParam(defaultValue = "0") int page,

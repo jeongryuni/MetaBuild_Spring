@@ -44,17 +44,17 @@ public class MovieService {
         movieRepository.save(movieEntity);
     }
 
-
     // 5. 영화 상세보기(select getByNum)
     public MovieEntity getMovieByNum(int num) {
         return movieRepository.findById(num).orElse(null);
     }
 
-    // 6/ 수정처리(update)
+    // 6. 수정처리(update)
     public void updateMovie(MovieEntity movieEntity) {
          movieRepository.save(movieEntity);
     }
 
+    // 7. 다중삭제(체크박스)
     public void deleteMovie(int num) {
         movieRepository.deleteById(num);
     }
