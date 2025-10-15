@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <style>
+        .center {
+            width: 600px;
+            margin: auto; /* div 자체를 중앙 배치 */
+        }
+
+        /* 페이지네이션 영역 */
+        .pagination {
+            text-align: center;   /* 가운데 정렬 */
+            margin-top: 20px;     /* 위쪽 여백 */
+        }
+
+        /* 페이지 번호 간격 */
+        .pagination span,
+        .pagination a {
+            margin: 0 6px;
+            text-decoration: none;   /* 밑줄 제거 */
+            color: black;            /* 링크 색상 통일 */
+        }
+
+        /* 현재 페이지 */
+        .pagination .current {
+            font-weight: bold;
+            color: red;
+        }
+
+        /* 링크 hover 효과 */
+        .pagination a:hover {
+            color: blue;
+        }
+    </style>
+
+    <meta charset="UTF-8">
+    <title>list</title>
+</head>
+<body>
+list.html<br>
+<div class="center">
+    <h2>여행 리스트 화면 ( <span th:text="${lists.size()}"></span>/[[${totalCount}]] ) </h2><br>
+    <!--검색창-->
+    <form th:action="@{list}" method="get">
+        <select name="whatColumn">
+            <option value="all">전체검색</option>
+            <option value="area">지역</option>
+            <option value="style">여행타입</option>
+        </select>
+        <input type="text" name="keyword">
+        <input type="submit" value="검색">
+        <!--whatColumn = area,style-->
+        <!--keyword = 내가 입력한 단어-->
+
+    </form>
+
+<br>
+    <table border="1">
+        <tr>
+            <th>번호</th>
+            <th>이름</th>
+            <th>나이</th>
+            <th>관심지역</th>
+            <th>여행타입</th>
+            <th>예상비용</th>
+            <th>삭제</th>
+            <th>수정</th>
+        </tr>
+
+
+            <th:block th:each="list: ${lists}">
+                <tr>
+                <td th:text="${list.num}"></td>
+                <td>
+                    <a th:href="@{content_view(num=${list.num})}" th:text="${list.name}"></a>
+                </td>
+                <td th:text="${list.age}"></td>
+                <td th:text="${list.areaAsString}"></td>
+                <td th:text="${list.style}"></td>
+                <td th:text="${list.price}"></td>
+                <td>
+                    <a th:href="@{/delete(num=${list.num}, page=${page}, whatColumn=${whatColumn}, keyword=${keyword})}">삭제</a>
+                </td>
+                <td>
+                    <a th:href="@{/update(num=${list.num}, page=${page}, whatColumn=${whatColumn}, keyword=${keyword})}">수정</a>
+                </td>
+                </tr>
+            </th:block>
+        <td colspan="8" style="text-align:center">
+            <a th:href="insert">삽입</a>
+        </td>
+
+    </table>
+</div>
+
+<!--페이지 설정 -->
+<!--이전 1 2 3 다음-->
+<div class="pagination">
+    <!--이전 버튼-->
+    <span th:if="${page > 1}"> <!--내가 선택한 페이지가 1보다 크면 '이전'페이지 생김-->
+        <a th:href="@{list(page=${page-1}, whatColumn=${whatColumn}, keyword=${keyword})}">이전</a> <!--페이지에서 하나 빼기-->
+    </span>
+
+    <!--현재 보고있는 페이지-->
+    <span th:each="i : ${#numbers.sequence(1, totalPage)}">
+
+            <!-- 현재 페이지가 아닌 경우: 번호에 링크를 걸어서 이동 가능 -->
+            <a th:if="${i != page}"
+               th:href="@{/list(page=${i}, whatColumn=${whatColumn}, keyword=${keyword})}"
+               th:text="${i}"></a>
+
+            <!-- 현재 페이지인 경우: 굵은 글씨 + 빨간색 표시 -->
+            <span th:if="${i == page}"
+                  th:text="${i}"
+                  style="font-weight:bold;color:red"></span>
+    </span>
+
+    <!--다음 버튼-->
+    <span th:if="${page < totalPage}">
+    <a th:href="@{list(page=${page+1}, whatColumn=${whatColumn}, keyword=${keyword})}">다음</a>
+</span>
+</div>
+</body>
+</html>

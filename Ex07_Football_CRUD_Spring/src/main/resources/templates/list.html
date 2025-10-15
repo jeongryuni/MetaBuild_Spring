@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>list</title>
+</head>
+
+
+<body>
+<div class="FootballList">
+    list.html<br>
+    <h2>리스트 목록 <span th:text="${lists.size()}"></span>/ <span th:text="${totalCount}"></span></h2>
+
+    </form>
+        <table border="1">
+            <tr>
+                <!--검색창-->
+                <td colspan="5" style="text-align:center;">
+                    <form th:action="@{list}" method="get">
+                        <select name="whatColumn">
+                            <option value="all">전체검색</option>
+                            <option value="id">아이디검색</option>
+                            <option value="win">예상국가검색</option>
+                            <option value="round16">16강 예상국가검색</option>
+                        </select>
+                        <input type="text" name="keyword">
+                        <input type="submit" value="검색">
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <th>번호</th>
+                <th>아이디</th>
+                <th>비밀번호</th>
+                <th>우승 예상국가</th>
+                <th>16강 예상국가</th>
+            </tr>
+
+            <th:block th:each="fb: ${lists}"> <!--리스트 값 하나씩 받음-->
+                <tr>
+                    <td th:text="${fb.num}"></td>
+
+                    <td>
+                       <a th:href="@{content_view(num=${fb.num}, page=${page}, whatColumn=${whatColumn}, keyword=${keyword})}" th:text="${fb.id}"></a>
+                    </td>
+                    <td th:text="${fb.pw}"></td>
+
+                    <td th:text="${fb.win}"></td>
+                    <td th:text="${fb.round16AsString}"></td>
+
+                </tr>
+            </th:block>
+            <tr>
+                <td colspan="5" style="text-align:center;">
+                    <a href="write">삽입</a>
+                </td>
+            </tr>
+    </table>
+
+        <!--페이지 설정-->
+        <!--이전 1 2 3 다음-->
+        <div class="pagination">
+            <!--이전-->
+            <span th:if="${page>1}">
+                <a th:href="@{/list(page=${page-1}, whatColumn=${whatColumn}, keyword=${keyword})}">이전</a>
+            </span>
+
+            <!--현재 페이지 반복문-->
+            <span th:each="i : ${#numbers.sequence(1, totalPage)}">
+                        <!-- 현재 페이지가 아닌 경우: 번호에 링크를 걸어서 이동 가능 -->
+                          <a th:if="${i != page}"
+                             th:href="@{/list(page=${i}, whatColumn=${whatColumn}, keyword=${keyword})}"
+                             th:text="${i}"></a>
+
+                    <!-- 현재 페이지인 경우: 굵은 글씨 + 빨간색 표시 -->
+                    <span th:if="${i == page}"
+                          th:text="${i}"
+                          style="font-weight:bold;color:red"></span>
+            </span> <!--현재페이지 반복문 끝-->
+
+
+            <!--다음 -->
+            <span th:if="${page<totalPage}"><!--현재 페이지가 마지막 페이지가 아니면 "다음" 버튼 생성-->
+                <a th:href="@{/list(page=${page+1}, whatColumn=${whatColumn}, keyword=${keyword})}">다음</a>
+            </span>
+        </div>
+</div>
+</body>
+</html>

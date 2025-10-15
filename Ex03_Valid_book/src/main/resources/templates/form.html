@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .err{
+        font-size:9pt;
+        color:red;
+    </style>
+
+</head>
+<body>
+<!-- 에러있어도 값은 받음 이후 div에서 유효성 검정 ==> 에러시 메시지 출력 -->
+<form th:action="@{formProc}" th:object="${per}" method="post">
+    이름: <input th:field="*{name}"><br>
+    <div th:if="${#fields.hasErrors('name')}"
+         th:errors="*{name}" class = "err"></div> <!--bean에 적은 에러메시지 출력-->
+    <br>
+
+    아이디: <input th:field="*{id}"><br>
+    <div th:if="${#fields.hasErrors('id')}"
+         th:errors="*{id}" class = "err"></div> <!--bean에 적은 에러메시지 출력-->
+    <br>
+
+    <button type="submit">전송</button>
+</form>
+</body>
+</html>

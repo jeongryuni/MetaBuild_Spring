@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+music/result1.html<br>
+<table border="1">
+    <tr>
+        <th>제목1</th>
+        <td>${param.title}</td>
+    </tr>
+    <tr>
+        <th>제목2</th>
+        <td th:text="${param.title}"></td>
+    </tr>
+    <tr>
+        <th>제목3</th>
+        <td th:text="${title}"></td>
+    </tr>
+    <tr>
+        <th>제목4</th>
+        <td th:text="${rtitle}"></td>
+    </tr>
+    <tr>
+        <th>제목4</th>
+        <td th:text="${mtitle}"></td>
+    </tr>
+
+</table>
+<br>
+<table border="1">
+
+    <tr>
+        <th>가수명1</th>
+        <td th:text="${param.singer}"></td>
+    </tr>
+    <tr>
+        <th>가수명2</th>
+        <td th:text="${rsinger}"></td>
+    </tr>
+    <tr>
+        <th>가수명3</th>
+        <td th:text="${msinger}"></td>
+    </tr>
+</table>
+<br>
+<table border="1">
+
+    <tr>
+        <th>가격</th>
+        <td th:text="${param.price}"></td>
+    </tr>
+    <tr>
+        <th>가수명2</th>
+        <td th:text="${rprice}"></td>
+    </tr>
+    <tr>
+        <th>가수명3</th>
+        <td th:text="${mprice}"></td>
+    </tr>
+</table>
+</body>
+</html>

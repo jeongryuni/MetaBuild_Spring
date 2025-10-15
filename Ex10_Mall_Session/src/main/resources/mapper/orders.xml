@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--orders.xml-->
+<mapper namespace="com.example.Ex02.mapper.OrderMapper">
+        <insert id="insertOrder" parameterType="com.example.Ex02.dto.OrderDto">
+            insert into orders (oid, mid, orderdate)
+            values (seqoid.nextval, #{mid}, sysdate)
+        </insert>
+
+        <!--가장 큰 oid값 -->
+        <select id="getMaxOid" resultType="int">
+            select max(oid)
+            from orders
+        </select>
+
+        <!--주문자 주문목록 찾기-->
+        <select id="orderMall">
+            select * from orders
+            where mid = #{id}
+            order by oid desc
+        </select>
+
+        <!--주문 상세보기-->
+        <select id="showDetail">
+            select num as pnum, name as pname, qty, price, qty*price as amount
+            from (orders o inner join orderdetails od
+            on o.oid = od.oid) inner join products
+            on pnum = num and o.oid = #{oid}
+        </select>
+
+</mapper>

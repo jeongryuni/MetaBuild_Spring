@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+        form.html<br>
+        <form th:action="@{/input5}" method="post">
+            <table border="1">
+                <tr>
+                    <th>제목</th>
+                    <td><input type="text" name="title"></td>
+                </tr>
+
+                <tr>
+                    <th>가수명</th>
+                    <td><input type="text" name="singer"></td>
+                </tr>
+
+                <tr>
+                    <th>가격</th>
+                    <td><input type="text" name="price"></td>
+                </tr>
+            </table>
+            <input type="submit" value="전송">
+        </form>
+
+
+</body>
+</html>

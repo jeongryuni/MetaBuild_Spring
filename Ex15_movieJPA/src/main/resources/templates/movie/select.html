@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/mylayout}">
+<head>
+    <meta charset="UTF-8">
+    <title>영화 목록</title>
+    <th:block layout:fragment="css"></th:block>
+</head>
+<!-- 스크립트 -->
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+
+        // (1) 전체 선택 / 해제 기능
+        function allCheck(source){
+             const checkboxes = document.getElementsByName("row");
+                for (let i=0; i < checkboxes.length; i++) {
+                    checkboxes[i].checked = source.checked;
+                }
+        }
+
+        // (2) 체크박스 선택 여부 확인 후 다중 삭제 처리
+        function checkDelete(){
+        var flag = false;
+        var rowcheck = document.getElementsByName("row");
+
+        // 체크박스 중 하나라도 선택됐는지 검사
+        for (var i = 0; i < rowcheck.length; i++) {
+            if (rowcheck[i].checked) {
+                flag = true;
+                break;
+            }
+        }
+
+        if (!flag) {
+            alert("체크박스를 하나라도 선택하세요");
+            return;
+        }
+
+        if (!confirm("정말 삭제하시겠습니까?")) return;
+        document.myform.submit();
+    }
+    </script>
+</th:block>
+<body>
+<!-- 상단 공통 헤더 -->
+<div th:replace="~{common/header::top}"></div>
+
+<!-- 본문 내용 -->
+<div class="content" layout:fragment="content">
+    <h2>영화 목록 페이지</h2>
+
+    <!-- 검색창 -->
+    <form th:action="@{/mlist}" method="get"
+          class="d-flex justify-content-end align-items-center mb-3 gap-2">
+        <input type="text" name="keyword" th:value="${keyword}"
+               class="form-control w-auto"
+               style="min-width: 250px;" placeholder="이름 또는 장르 검색">
+        <button type="submit" class="btn btn-primary" style="margin-left:10px;">검색</button>
+    </form>
+
+    <!-- 다중삭제용 폼 -->
+    <form name="myform" method="post" th:action="@{/deleteSelect}">
+
+        <!-- 영화 목록 테이블 -->
+        <table class="table table-bordered text-center align-middle">
+            <thead class="table-light">
+            <tr>
+                <th><input type="checkbox" id="all" onclick="allCheck(this)"> 번호</th>
+                <th>아이디</th>
+                <th>이름</th>
+                <th>나이</th>
+                <th>좋아하는 장르</th>
+                <th>즐겨찾는 시간대</th>
+                <th>동반 관객 수</th>
+                <th>개선사항</th>
+                <th>수정</th>
+                <th>삭제</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="movie : ${movieList}">
+                <td>
+                    <input type="checkbox" name="row" th:value="${movie.num}">
+                    <label th:text="${movie.num}"></label>
+                </td>
+                <td th:text="${movie.id}"></td>
+                <td>
+                    <a th:href="@{/movie/detail(num=${movie.num}, page=${page}, size=${size}, keyword=${keyword})}" th:text="${movie.name}"></a>
+                </td>
+                <td th:text="${movie.age}"></td>
+                <td th:text="${movie.genre}"></td>
+                <td th:text="${movie.time}"></td>
+                <td th:text="${movie.partner}"></td>
+                <td th:text="${movie.memo}"></td>
+                <td>
+                    <a th:href="@{/movie/update(num=${movie.num}, page=${page}, size=${size}, keyword=${keyword})}"
+                       class="btn btn-sm btn-outline-secondary">수정</a>
+                </td>
+                <td>
+                    <a th:href="@{/movie/delete(num=${movie.num}, page=${page}, size=${size}, keyword=${keyword})}"
+                       class="btn btn-sm btn-outline-danger"
+                       onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- 버튼 영역 -->
+        <div class="text-center mt-3">
+            <button type="button" class="btn btn-primary"
+                    th:onclick="|location.href='@{/movie/insert}'|">추가</button>
+            <button type="button" class="btn btn-danger" onclick="checkDelete()">선택항목 삭제</button>
+        </div>
+    </form>
+
+    <!-- 페이지네이션 -->
+    <div th:if="${movieList.totalPages > 0}" class="mt-4">
+        <nav>
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${movieList.hasPrevious()}?'':'disabled'">
+                    <a class="page-link"
+                       th:href="@{/mlist(page=${movieList.number-1}, size=${movieList.size}, keyword=${keyword})}">Previous</a>
+                </li>
+
+                <li class="page-item"
+                    th:each="i : ${#numbers.sequence(0, movieList.totalPages-1)}"
+                    th:classappend="${i == movieList.number} ? 'active' : ''">
+                    <a class="page-link"
+                       th:href="@{/mlist(page=${i}, size=${movieList.size}, keyword=${keyword})}"
+                       th:text="${i + 1}"></a>
+                </li>
+
+                <li class="page-item" th:classappend="${movieList.hasNext()}?'':'disabled'">
+                    <a class="page-link"
+                       th:href="@{/mlist(page=${movieList.number+1}, size=${movieList.size}, keyword=${keyword})}">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>updateForm</title>
+</head>
+
+<style>
+
+</style>
+
+<body>
+<div th:insert ="~{fragment :: header}"></div>
+<form th:action="@{/pupdateProc.prd}" th:object="${pDto}" method="post" enctype="multipart/form-data" >
+    <input type="hidden" th:field="*{num}">
+    <input type="hidden" th:field="*{image}">
+
+    <input type="hidden"  name="whatColumn" th:value="${whatColumn}">
+    <input type="hidden" name="keyword" th:value="${keyword}">
+    <input type="hidden" name="page" th:value="${page}">
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>상품명</th>
+            <td>
+                <input type="text" th:field="*{name}">
+                <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color:red">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>제조회사</th>
+            <td>
+                <input type="text" th:field="*{company}" oninput="resetIdCheck()">
+                <div th:if="${#fields.hasErrors('company')}" th:errors="*{company}" style="color:red">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>가격</th>
+            <td><input type="text" th:field="*{price}">
+                <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}" style="color:red"></div>
+            </td>
+
+        </tr>
+        <tr>
+            <th>재고수량</th>
+            <td>
+                <input type="text" th:field="*{stock}">
+                <div th:if="${#fields.hasErrors('stock')}" th:errors="*{stock}" style="color:red">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>적립포인트</th>
+            <td>
+                <input type="text" th:field="*{point}">
+                <div th:if="${#fields.hasErrors('point')}" th:errors="*{point}" style="color:red">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>설명</th>
+            <td>
+                <input type="text" th:field="*{contents}">
+                <div th:if="${#fields.hasErrors('contents')}" th:errors="*{contents}" style="color:red">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <!--file-->
+            <th>상품이미지 <br>
+                <span th:text="*{image}"></span></th>
+            <td  class="image-cell">
+                <input type="file" th:field="*{file}">
+                <img th:src="@{'/images/' + ${pDto.image}}" style="width:150px; height:auto; display:block; margin:auto;">
+                <div th:if="${#fields.hasErrors('file')}" th:errors="*{file}" style="color:red">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align:center;">
+                <input type="submit" value="수정">||
+                <a th:href="@{/plist.prd(page=${page}, whatColumn=${whatColumn}, keyword=${keyword})}"
+                   style="text-align:center;">
+                    목록
+                </a>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

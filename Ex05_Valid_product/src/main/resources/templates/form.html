@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>form</title>
+</head>
+<style>
+    .err {
+        color: red;
+    }
+</style>
+
+
+<body>
+    <h2>마트 상품 구매 내역</h2>
+    <form th:action="@{/submit}" th:object="${prod}" method="post">
+        <label>아이디 </label> <input type="text" th:field="*{id}"><br>
+        <div th:if="${#fields.hasErrors('id')}"
+        th:errors="*{id}" class="err"></div>
+        <br>
+        <label>비번 </label> <input type="text"  th:field="*{passwd}"><br>
+        <div th:if="${#fields.hasErrors('passwd')}"
+             th:errors="*{passwd}" class="err"></div>
+        <br>
+        구매상품:
+        <input type="checkbox" th:field="*{product}" value="식품">식품
+        <input type="checkbox" th:field="*{product}" value="의류">의류
+        <input type="checkbox" th:field="*{product}" value="도서">도서
+        <input type="checkbox" th:field="*{product}" value="가구">가구
+        <br>
+        <div th:if="${#fields.hasErrors('product')}"
+             th:errors="*{product}" class="err"></div><br>
+        배송시간:
+        <select th:field="*{deliveryTime}">
+            <option value="">선택</option>
+            <option value="오전">오전 (09:00 ~ 12:00)</option>
+            <option value="오후">오후 (12:00 ~ 18:00)</option>
+            <option value="저녁">저녁 (18:00 ~ 21:00)</option>
+        </select>
+        <br>
+        <div th:if="${#fields.hasErrors('deliveryTime')}"
+             th:errors="*{deliveryTime}" class="err"></div>
+        <br>
+        결제방법 :
+        <input type="radio" th:field="*{radio}" value="카드">카드
+        <input type="radio" th:field="*{radio}" value="핸드폰">핸드폰
+        <br>
+        <div th:if="${#fields.hasErrors('radio')}"
+             th:errors="*{radio}" class="err"></div><br>
+        결제동의
+        <input type="checkbox" th:field="*{agree}" value="동의"><br>
+        <div th:if="${#fields.hasErrors('agree')}"
+             th:errors="*{agree}" class="err"></div><br>
+        <br>
+        <button type="submit">제출</button>
+    </form>
+</body>
+</html>

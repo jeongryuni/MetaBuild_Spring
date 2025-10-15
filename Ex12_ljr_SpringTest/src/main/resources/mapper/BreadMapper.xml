@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.Ex02.mapper.BreadMapper">
+    <resultMap id="resultBread" type="com.example.Ex02.dto.BreadDto">
+        <result property="ingredientsAsString" column="ingredients"></result>
+        <result property="storageType" column="storage_type"></result>
+        <result property="date" column="release_date"></result>
+    </resultMap>
+
+    <!--전체 검색-->
+    <select id="breadSelectAll" resultMap="resultBread">
+        select id, name, code, description, ingredients, storage_type, category, price, stock, to_char(release_date, 'YYYY-MM-DD') as release_date
+        from  bread
+
+        <where>
+            <choose>
+                <when test="whatColumn == 'all' and keyword != null and keyword != ''">
+                    name like '%' || #{keyword} || '%' or
+                    to_char(code) like '%' || #{keyword} || '%' or
+                    category like '%' || #{keyword} || '%'
+                </when>
+
+                <when test="whatColumn != null and whatColumn != 'all' and  keyword != null and keyword != ''">
+                    ${whatColumn} LIKE '%' || #{keyword} || '%'
+                </when>
+            </choose>
+        </where>
+        order by id desc
+        offset #{offset} rows fetch next #{limit} rows only
+    </select>
+
+    <select id="getCount">
+        select count(*) from bread
+        <where>
+            <choose>
+                <when test="whatColumn == 'all' and keyword != null and keyword != ''">
+                    name like '%' || #{keyword} || '%' or
+                    to_char(code) like '%' || #{keyword} || '%' or
+                    category like '%' || #{keyword} || '%'
+                </when>
+
+                <when test="whatColumn != null and whatColumn != 'all' and  keyword != null and keyword != ''">
+                    ${whatColumn} LIKE '%' || #{keyword} || '%'
+                </when>
+            </choose>
+        </where>
+    </select>
+
+
+    <select id="selectById" resultMap="resultBread">
+        select id, name, code, description, ingredients, storage_type, category, price, stock, to_char(release_date, 'YYYY-MM-DD') as release_date
+        from  bread
+        where id = #{id}
+        order by id asc
+    </select>
+
+    <!--삽입-->
+    <insert id="insertBread" parameterType="com.example.Ex02.dto.BreadDto">
+        insert into bread (id, name, code, description, ingredients, storage_type, category, price, stock, release_date)
+        values (bread_seq.nextval, #{name}, #{code}, #{description}, #{ingredientsAsString}, #{storageType}, #{category}, #{price}, #{stock}, sysdate)
+    </insert>
+
+    <!--수정-->
+    <update id="updateBread">
+        update bread
+        set
+        name = #{name},
+        code = #{code},
+        description = #{description},
+        ingredients = #{ingredientsAsString},
+        storage_type = #{storageType},
+        category = #{category},
+        price = #{price},
+        stock = #{stock},
+        release_date = TO_DATE(#{date}, 'YYYY-MM-DD')  WHERE id = #{id}
+    </update>
+
+    <delete id="deleteBread">
+        delete from bread
+        where id = #{id}
+    </delete>
+
+    <!--코드 중복체크-->
+    <select id="selectCountCode">
+        select count(code) from bread
+        where upper(code) = upper(#{code})
+    </select>
+</mapper>

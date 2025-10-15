@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>modify</title>
+</head>
+<body>
+modify<br>
+<h2>수정폼</h2>
+
+
+<form th:action="@{/updateProc}" th:object="${fDto}" method="post">
+    <input type="hidden"  th:field="*{num}">
+    <input type="hidden"  th:field="*{id}">
+    <input type="hidden" name="page" th:value="${page}">
+    <input type="hidden" name="whatColumn" th:value="${whatColumn}">
+    <input type="hidden" name="keyword" th:value="${keyword}">
+
+    <table border="1">
+        <tr>
+            <td>아이디</td>
+            <td th:text="*{id}"></td>
+            </td>
+
+        </tr>
+        <tr>
+            <td>비밀번호</td>
+            <td><input type="text" th:field="*{pw}">
+                <div th:if="${#fields.hasErrors('pw')}" th:errors="*{pw}" class="err"></div>
+            </td>
+        </tr>
+
+        <tr>
+            <td>우승 예상 국가</td>
+            <td>
+<!--                <input type="radio" th:field="*{win}" value="한국">한국
+                <input type="radio" th:field="*{win}" value="미국">미국
+                <input type="radio" th:field="*{win}" value="독일">독일
+                <input type="radio" th:field="*{win}" value="스페인">스페인-->
+                <span th:each="nation : ${nationList}">
+                        <input type="radio" name="win" th:value="${nation}" th:checked="${fDto.win == nation}">[[${nation}]]
+                </span>
+                <div th:if="${#fields.hasErrors('win')}"
+                     th:errors="*{win}" class="err"></div>
+            </td>
+
+        </tr>
+
+        <tr>
+            <td>16강 예상 국가</td>
+            <td>
+<!--             <input type="checkbox" th:field="*{round16}" value="한국">한국
+                <input type="checkbox" th:field="*{round16}" value="멕시코">멕시코
+                <input type="checkbox" th:field="*{round16}" value="독일">독일
+                <input type="checkbox" th:field="*{round16}" value="브라질">브라질
+                <input type="checkbox" th:field="*{round16}" value="스위스">스위스
+                <input type="checkbox" th:field="*{round16}" value="잉글랜드">잉글랜드-->
+                <span th:each="round : ${round16List}">
+                    <input type="checkbox" name="round16" th:value="${round}" th:checked="${fDto.round16AsString.contains(round)}">[[${round}]]
+                </span>
+                <div th:if="${#fields.hasErrors('round16')}"
+                     th:errors="*{round16}" class="err"></div>
+
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2" style="text-align:center">
+                <input type="submit" value="수정하기">
+                <a th:href="@{list}"> 목록보기</a>
+            </td>
+        </tr>
+
+    </table>
+</form>
+
+
+
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>content_view</title>
+    <style>
+     .err { color: red; }
+     h2 {
+        margin: auto;
+        text-align: center;
+    }
+
+    table {
+        width: 800px;
+        border-collapse: collapse;
+        text-align: center;
+        margin: auto;
+    }
+    </style>
+</head>
+<body>
+content_view<br>
+<h2>상세보기 : <span th:text="${num}"></span></h2><br>
+
+    <table border="1">
+        <tr>
+            <td>번호</td><td><span th:text="${tDtd.num}"></span></td>
+        </tr>
+        <tr>
+            <td>이름</td><td><span th:text="${tDtd.name}"></span></td>
+        </tr>
+        <tr>
+            <td>나이</td><td><span th:text="${tDtd.age}"></span></td>
+        </tr>
+        <tr>
+            <td>관심지역</td><td><span th:text="${tDtd.areaAsString}"></span></td>
+        </tr>
+        <tr>
+            <td>여행타입</td><td><span th:text="${tDtd.style}"></span></td>
+        </tr>
+        <tr>
+            <td>예상비용</td><td><span th:text="${tDtd.price}"></span></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <a th:href="@{/update(num=${tDtd.num})}">수정</a>|
+                <a th:href="@{/delete(num=${tDtd.num})}">삭제</a>|
+                <a th:href="@{list}">목록가기</a>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+
+</html>

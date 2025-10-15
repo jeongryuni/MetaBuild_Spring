@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    view02.html
+    번호1: <span th:text="${itemDto.no}"></span> <br>
+    번호2: [[${itemDto.no}]] <br>
+    번호3: <span th:text="${itemDto.getNo()}"></span> <br>
+    번호4: [[${itemDto.getNo()}]] <br>
+
+    상품설명1 : <span th:text="${itemDto.itemDetail}"></span>
+    상품설명2 : [[${itemDto.itemDetail}]]
+    상품설명3: <span th:text="${itemDto.getItemDetail()}"></span> <br>
+    상품설명4 : [[${itemDto.getItemDetail}]]
+
+    가격1 :<span th:text="${itemDto.price}"></span>
+    가격2 : [[${itemDto.price}]]
+    가격3 :[[${itemDto.getPrice()}]]
+
+
+</body>
+</html>

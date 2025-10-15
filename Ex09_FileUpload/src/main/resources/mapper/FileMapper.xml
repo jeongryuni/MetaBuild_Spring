@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.Ex02.mapper.FileMapper">
+
+<!--    <resultMap id="fileResultMap" type="com.example.Ex02.dto.FileInfo">
+            <id property="id" column="id"></id>
+            <result property="name" column="name"></result>
+            <result property="filename" column="filename"></result>
+            <result property="fileSize" column="file_size"></result>
+    </resultMap>-->
+
+    <!--업로드된 파일 메타데이터 저장-->
+    <insert id="saveFileInfo" parameterType="com.example.Ex02.dto.FileInfo">
+        insert into file_info (id, name, filename, file_size)
+        values(file_seq.nextval, #{name}, #{filename}, #{fileSize})
+    </insert>
+
+    <!--이미지 조회-->
+    <select id="getAllFiles" parameterType="com.example.Ex02.dto.FileInfo">
+        select id, name, filename, file_size as fileSize <!--일치하지 않은 컬럼만 as 별칭-->
+        from file_info
+        order by id desc
+    </select>
+</mapper>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>result</title>
+</head>
+<body>
+    result.html<br>
+    <table border="1">
+        <tr>
+            <td>아이디</td><td th:text="${fb.id}"></td>
+        </tr>
+        <tr>
+            <td>비밀번호</td><td th:text="${fb.pw}"></td>
+        </tr>
+        <tr>
+            <td>우승 예상 국가</td><td th:text="${fb.win}"></td>
+        </tr>
+        <tr>
+            <td>16강 예상 국가</td><td th:text="${fb.round16}"></td>
+        </tr>
+
+    </table>
+</body>
+</html>

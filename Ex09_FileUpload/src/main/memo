@@ -1,0 +1,15 @@
+drop sequence file_seq;
+create sequence file_seq;
+
+drop table file_info;
+CREATE TABLE file_info (
+    id NUMBER PRIMARY KEY,
+    name varchar2(20),
+    filename VARCHAR2(255) NOT NULL,
+    file_size NUMBER NOT NULL
+);
+
+col id for 99
+col name for a10
+col filename for a20
+select * from file_info order by id;

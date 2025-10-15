@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.Ex02.mapper.TravelMapper">
+
+    <resultMap id="resultMapTravel" type="com.example.Ex02.dto.TravelDto">
+
+        <id property="num" column="num"></id>
+        <result property="name" column="name"></result>
+        <result property="age" column="age"></result>
+        <result property="areaAsString" column="area"></result>
+        <result property="style" column="style"></result>
+        <result property="price" column="price"></result>
+
+    </resultMap>
+
+    <!--insert-->
+    <insert id="insertTravel" parameterType="com.example.Ex02.dto.TravelDto">
+        insert into travel
+        values(travel_seq.nextval, #{name}, #{age}, #{areaAsString}, #{style}, #{price})
+    </insert>
+
+    <!--전체조회 및 검색-->
+    <select id="selectAll" resultMap="resultMapTravel">
+        select * from travel
+        <where>
+            <choose>
+                <!-- 전체검색: 모든 컬럼 대상으로 keyword 찾기 -->
+                <!-- whatColum이 'all'이고 keyword 값이 null도 아니고 빈문자열도 아닐 때 실행 -->
+                <!-- 즉, 검색어(keyword)가 입력되었고, '전체검색' 옵션이 선택된 경우-->
+                <when test="whatColumn == 'all' and keyword !=null and keyword !=''">
+
+                    <!-- style 컬럼에 keyword가 포함되어 있는지 확인 (부분 검색)-->
+                    style like '%' || #{keyword} || '%' or
+                    <!--area 컬럼에도 keyword가 포함되어 있는지 확인-->
+                    area like '%' || #{keyword} || '%'
+                </when>
+
+                <!-- #{} = 값 바인딩 자리-->
+                <!-- ${} = SQL 구문에 그대로 삽입 (컬럼명/테이블명 동적 처리)-->
+                <when test="whatColumn !=null and whatColumn != 'all' and keyword !=null and keyword !=''">
+                    ${whatColumn} like '%' || #{keyword} || '%'
+                </when>
+            </choose>
+        </where>
+
+        order by num desc
+        offset #{offset} rows fetch next #{limit} rows only
+    </select>
+
+    <!--검색어가 포함된 레코드 개수-->
+    <select id="getCount" resultType="int">
+        select count(*)
+        from travel
+        <where>
+            <choose>
+                <!-- 전체검색: 모든 컬럼 대상으로 keyword 찾기 -->
+                <!-- whatColum이 'all'이고 keyword 값이 null도 아니고 빈문자열도 아닐 때 실행 -->
+                <!-- 즉, 검색어(keyword)가 입력되었고, '전체검색' 옵션이 선택된 경우-->
+                <when test="whatColumn == 'all' and keyword !=null and keyword !=''">
+
+                    <!-- style 컬럼에 keyword가 포함되어 있는지 확인 (부분 검색)-->
+                    style like '%' || #{keyword} || '%' or
+                    <!--area 컬럼에도 keyword가 포함되어 있는지 확인-->
+                    area like '%' || #{keyword} || '%'
+                </when>
+
+                <!-- #{} = 값 바인딩 자리-->
+                <!-- ${} = SQL 구문에 그대로 삽입 (컬럼명/테이블명 동적 처리)-->
+                <when test="whatColumn !=null and whatColumn != 'all' and keyword !=null and keyword !=''">
+                    ${whatColumn} like '%' || #{keyword} || '%'
+                </when>
+            </choose>
+        </where>
+    </select>
+
+    <!--상세보기 findByNum-->
+    <select id="findByNum" resultMap="resultMapTravel">
+        select * from travel where num = #{num}
+    </select>
+
+    <!--수정 update-->
+    <update id="updateTravel" parameterType="com.example.Ex02.dto.TravelDto">
+        update travel set name=#{name}, age=#{age}, area=#{areaAsString}, style=#{style}, price=#{price}
+        where num= #{num}
+    </update>
+
+    <delete id="deleteTravel" parameterType="com.example.Ex02.dto.TravelDto">
+        delete from travel where num = #{num}
+    </delete>
+
+
+</mapper>

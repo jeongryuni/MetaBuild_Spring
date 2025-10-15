@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>memberList</title>
+</head>
+
+<style>
+    h2 {
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    th, td {
+    border: 1px solid #666;
+    padding: 6px;
+    text-align: center;
+    word-wrap: break-word; /* 긴 글 자동 줄바꿈 */
+    }
+
+
+    th:nth-child(5), td:nth-child(5) {
+        width: 220px;
+    }
+
+    table {
+        margin: auto;
+        border: 1px solid #666;
+        border-collapse: collapse;
+        width: 750px;
+
+    }
+
+    .insertbt{
+        text-align: right;
+    }
+</style>
+<body>
+<div class="Allbody">
+<h2>멤버 리스트
+    ( <span th:text="${lists.size()}"></span> / <span th:text="${totalCount}"></span> )
+</h2>
+    <div th:insert ="~{fragment :: header}"></div>
+    <table>
+<tr>
+    <td colspan="9" style="text-align:center;">
+        <!--검색창-->
+        <form th:action="@{mlist.mb}" method="get" class="search-box">
+            <select name="whatColumn">
+                <option value="all">전체검색</option>
+                <option value="id">ID</option>
+                <option value="name">이름</option>
+                <option value="address">주소</option>
+            </select>
+
+            <input type="text" name="keyword">
+            <input type="submit" value="검색">
+        </form>
+</td>
+</tr>
+
+            <tr>
+                <td colspan="9" class="insertbt">
+                    <input type="button" value="추가하기" onclick="location.href='/minsert.mb'">
+                </td>
+            </tr>
+            <tr>
+                <th>ID</th>
+                <th>이름</th>
+                <th>비번</th>
+                <th>성별</th>
+                <th>취미</th>
+                <th>주소</th>
+                <th>포인트</th>
+                <th>삭제</th>
+                <th>수정</th>
+            </tr>
+
+            <tr th:each="m : ${lists}">
+                <td th:text="${m.id}"></td>
+                <td th:text="${m.name}"></td>
+                <td th:text="${m.password}"></td>
+                <td th:text="${m.gender}"></td>
+                <td th:text="${m.hobbyAsString}"></td>
+                <td th:text="${m.address}"></td>
+                <td th:text="${m.mpoint}"></td>
+                <td>
+                    <a th:href="@{/mdelete.mb(id=${m.id}, page=${page}, whatColumn=${whatColumn}, keyword=${keyword})}">삭제</a>
+                </td>
+                <td>
+                    <a th:href="@{/mupdate.mb(id=${m.id}, page=${page}, whatColumn=${whatColumn}, keyword=${keyword})}">수정</a>
+                </td>
+            </tr>
+
+<tr>
+
+<td colspan="9">
+
+<!--페이지 설정 -->
+<!--이전 1 2 3 다음-->
+<div class="pagination">
+    <!--이전 버튼-->
+    <span th:if="${page > 1}"> <!--내가 선택한 페이지가 1보다 크면 '이전'페이지 생김-->
+        <a th:href="@{mlist.mb(page=${page-1}, whatColumn=${whatColumn}, keyword=${keyword})}">이전</a> <!--페이지에서 하나 빼기-->
+    </span>
+
+    <!--현재 보고있는 페이지-->
+    <span th:each="i : ${#numbers.sequence(1, totalPage)}">
+
+            <!-- 현재 페이지가 아닌 경우: 번호에 링크를 걸어서 이동 가능 -->
+            <a th:if="${i != page}"
+               th:href="@{/mlist.mb(page=${i}, whatColumn=${whatColumn}, keyword=${keyword})}"
+               th:text="${i}"></a>
+
+        <!-- 현재 페이지인 경우: 굵은 글씨 + 빨간색 표시 -->
+            <span th:if="${i == page}"
+                  th:text="${i}"
+                  style="font-weight:bold;color:red"></span>
+    </span>
+
+    <!--다음 버튼-->
+    <span th:if="${page < totalPage}">
+    <a th:href="@{mlist.mb(page=${page+1}, whatColumn=${whatColumn}, keyword=${keyword})}">다음</a>
+</span>
+</div>
+</td>
+</tr>
+    </table>
+</div>
+</body>
+</html>

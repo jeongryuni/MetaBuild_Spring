@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입</title>
+</head>
+
+<style>
+    h2 {
+         text-align: center;
+         margin: 20px 0;
+     }
+     table{
+         margin : auto;
+         border : 1px solid #232323;
+         border-collapse : collapse;
+         width : 700px;
+     }
+</style>
+
+
+<script>
+
+    let isChecked = false; //중복체크 버튼 클릭
+    let idAvailable = false; // 아이디 사용불가 (디폴트)
+
+    // 중복체크 버튼 클릭했을 때
+    function checkId(){
+       idValue = document.getElementById('idInput').value; // input에 입력한 아이디
+
+      if(idValue == ''){
+        alert("아이디를 입력하세요");
+        return;
+      }
+      fetch("/checkId.mb?id="+encodeURIComponent(idValue))
+            .then(response=> response.text())
+            .then(result => {
+                     const msgSpan = document.getElementById('idCheckResult');
+                     isChecked = true; // 중복체크 클릭시 true
+                     if(result == "duplicate"){
+                            msgSpan.textContent  = "이미 사용중인 아이디 입니다";
+                            msgSpan.style.color="red";
+                            idAvailable = false;
+                     }else{
+                            msgSpan.textContent = "사용가능한 아이디 입니다";
+                            msgSpan.style.color="green";
+                            idAvailable = true;
+                     }
+                })
+                .catch(error => {
+                        console.log("에러발생", error);
+                })
+    }// CheckId
+
+    // 새로운 입력이 들어왔을떄
+    function resetIdCheck(){
+        isChecked = false;
+        idAvailable = false;
+        const msgSpan = document.getElementById('idCheckResult');
+        msgSpan.textContent = ''
+        msgSpan.style.color = "gray";
+
+    }//resultIdCheck
+
+    // submit클릭했을떄
+    function validateForm(){
+        alert(111)
+
+        if(!isChecked){
+            alert("아이디 중복체크 먼저")
+            return false;
+        }
+
+        if(!idAvailable){ // !로 강제로 참으로 바꿈
+            alert("아이디 사용중인 아이디");
+            return false;
+        }
+        return true;
+
+    }
+
+
+</script>
+<body>
+<h2>회원가입 화면</h2>
+<div th:insert ="~{fragment :: header}"></div>
+<form th:action="@{/minsertProc.mb}" th:object="${mDto}" method="post" onsubmit="return validateForm()">
+    <table border="1" cellpadding="8">
+        <tr>
+            <td>아이디</td>
+            <td>
+                <input id="idInput" type="text" th:field="*{id}" oninput="resetIdCheck()">
+                <input type="button" value="중복체크" onclick="checkId()">
+                <span id="idCheckResult"></span>
+            <div th:if="${#fields.hasErrors('id')}" th:errors="*{id}" style="color:red">
+            </div>
+            </td>
+        </tr>
+        <tr>
+            <td>이름</td>
+            <td><input type="text" th:field="*{name}">
+                <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color:red"></div>
+            </td>
+
+        </tr>
+        <tr>
+            <td>비밀번호</td>
+            <td>
+                <input type="password" th:field="*{password}">
+                <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color:red">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>성별</td>
+            <td>
+                <input type="radio" th:field="*{gender}" value="남자"> 남자
+                <input type="radio" th:field="*{gender}" value="여자"> 여자
+                <div th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}" style="color:red">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>취미</td>
+            <td>
+                <input type="checkbox" th:field="*{hobby}" value="마라톤">마라톤
+                <input type="checkbox" th:field="*{hobby}" value="영화감상">영화감상
+                <input type="checkbox" th:field="*{hobby}" value="게임">게임
+                <input type="checkbox" th:field="*{hobby}" value="공부">공부
+                <div th:if="${#fields.hasErrors('hobby')}" th:errors="*{hobby}" style="color:red">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>주소</td>
+            <td><input type="text" th:field="*{address}">
+                <div th:if="${#fields.hasErrors('address')}" th:errors="*{address}" style="color:red">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>적립포인트</td>
+            <td><input type="number" th:field="*{mpoint}">
+                <div th:if="${#fields.hasErrors('mpoint')}" th:errors="*{mpoint}" style="color:red">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align:center;">
+                <input type="submit" value="추가하기">
+                <input type="button" value="목록으로" onclick="location.href='/mlist.mb'">
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

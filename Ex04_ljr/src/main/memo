@@ -1,0 +1,20 @@
+server.port=9292
+home.html로 이동
+
+
+   1. memberForm.html에서 input1요청 => member/result1.html
+    3가지 받아서 각각 model속성, 각각 request속성 설정
+
+   2. memberForm.html에서 input2요청=> member/result2.html
+    3가지 @RequestParam
+    bean으로 묶고 bean을 model 속성 설정
+
+   3. memberForm.html에서 input3요청=> member/result3.html
+    3가지 받아서
+    ModelAndView
+
+   4. memberForm.html에서 input4요청=> member/result4.html
+    3가지 받아서 command 객체로 만들어서 보내기
+
+   5. memberForm.html에서 input5요청=> member/result5.html
+    3가지 받아서 command 객체로 만들어서 별칭(@ModelAttribute) 설정해서 보내기

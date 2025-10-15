@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<form th:action="@{/input1}" method="post">
+    <table>
+        <tr>
+            <td>이름</td>
+            <td><input type="text" name="name"/></td>
+        </tr>
+        <tr>
+            <td>나이</td>
+            <td><input type="text" name="age"/></td>
+        </tr>
+
+        <tr>
+            <td>취미</td>
+            <td>
+                <input type="checkbox" name="hobby" value="수영"/>수영<br>
+                <input type="checkbox" name="hobby" value="요리"/>요리<br>
+                <input type="checkbox" name="hobby" value="게임"/>게임<br>
+            </td>
+        </tr>
+    </table>
+    <input type="submit" value="전송"/>
+</form>
+</body>
+</html>

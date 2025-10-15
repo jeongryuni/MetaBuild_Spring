@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    music/result3.html<br>
+
+    제목 : <span th:text="${title}"></span><br>
+    가수 : <span th:text="${singer}"></span><br>
+    가격 : <span th:text="${price}"></span><br>
+    주소 : <span th:text="${addr}"></span><br>
+    <hr>
+
+    제목 : <span th:text="${mavMusic.title}"></span><br>
+    가수 : <span th:text="${mavMusic.singer}"></span><br>
+    가격 : <span th:text="${mavMusic.price}"></span><br>
+
+
+</body>
+</html>

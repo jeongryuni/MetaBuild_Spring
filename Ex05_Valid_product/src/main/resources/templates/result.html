@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+        result.html<br><br>
+        아이디 : <span th:text="${prod.id}"></span><br>
+        비번 : <span th:text="${prod.passwd}"></span><br>
+        구매상품 : <span th:each="p,stat : ${prod.product}"
+                th:text="${p + (stat.last? '':',')}"></span><br>
+
+
+        배송시간 : <span th:text="${prod.deliveryTime}"></span><br>
+        결제 방법 : <span th:text="${prod.radio}"></span><br>
+        동의 : <span th:text="${prod.agree ? '동의':'미동의'}"></span><br>
+</body>
+</html>

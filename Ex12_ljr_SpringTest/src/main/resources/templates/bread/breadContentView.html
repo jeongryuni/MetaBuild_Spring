@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>breadContentView</title>
+</head>
+<style>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            font-family: "Noto Sans KR", sans-serif;
+        }
+
+        h2 {
+            text-align: center;
+            color: #121212;
+            margin-top: 30px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 1200px;
+            margin: 20px auto;
+            border-radius: 10px;
+            overflow: hidden;
+            font-size: 16px;
+        }
+
+        th {
+            background-color: #121212;
+            color: #ffffff;
+            text-align: center;
+            border: none;
+            width: 200px;
+        }
+
+        th, td {
+            padding: 14px 20px;
+        }
+
+        td {
+            border-bottom: 1px solid #121212;
+        }
+
+     input[type="text"]{
+        border: 2px solid #ccc;
+        padding: 6px 10px;
+        border-radius: 4px;
+        outline: none;
+    }
+
+    .error-msg{
+        color : red;
+        pont-size: 12px;
+    }
+    input[type="text"].error-border {
+        border: 2px solid red;
+    }
+    .bt-class{
+        text-align: center;
+        background-color: #121212;
+    }
+    .btn {
+        width : 100px;
+        display: inline-block;
+        background-color: #ffffff;
+        color: #121212;
+        border: 1px solid #121212;
+        padding: 8px 16px;
+        border-radius: 4px;
+        font-weight: bold;
+        text-decoration: none;
+    }
+    .btn:hover {
+        background-color: #121212;
+        color: #ffffff;
+    }
+
+</style>
+
+
+<body>
+<h2>제품 상세보기</h2>
+<form action="breadInsertProc" th:object="${bDto}" method="post"  enctype="multipart/form-data">
+    <input type="hidden" th:field="*{id}">
+    <table>
+        <tr>
+            <th>상품명</th>
+            <td>
+                <span th:text="*{name}"></span>
+            </td>
+        </tr>
+        <tr>
+            <th>고유코드</th>
+            <td>
+                <span th:text="*{code}"></span>
+            </td>
+        </tr>
+        <tr>
+            <th>설명</th>
+            <td>
+                <span th:text="*{description}"></span>
+            </td>
+        </tr>
+        <tr>
+            <th>재료 선택</th>
+            <td>
+                <span th:text="*{getIngredientsAsString}"></span>
+            </td>
+        </tr>
+        <tr>
+            <th>보관방법</th>
+            <td>
+                <span th:text="*{storageType}"></span>
+            </td>
+        </tr>
+        <tr>
+            <th>카테고리</th>
+            <td>
+                <span th:text="*{category}"></span>
+            </td>
+        </tr>
+        <tr>
+            <th>가격</th>
+            <td>
+                <span th:text="*{price}"></span>
+            </td>
+        </tr>
+        <tr>
+            <th>재고</th>
+            <td>
+                <span th:text="*{stock}"></span>
+            </td>
+        </tr>
+        <tr>
+            <th>출시일</th>
+            <td>
+                <span th:text="*{date}"></span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" class="bt-class">
+                <a th:href="@{/breadUpdateForm(id=${bDto.id}, page=${page}, whatColumn=${whatColumn}, keyword=${keyword})}" class="btn">수정</a>
+                <a th:href="@{/breadList(id=${bDto.id}, page=${page}, whatColumn=${whatColumn}, keyword=${keyword})}" class="btn">목록</a>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

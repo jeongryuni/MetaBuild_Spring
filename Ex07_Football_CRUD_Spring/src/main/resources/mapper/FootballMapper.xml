@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.Ex02.mapper.FootballMapper">
+    <!--resultMap: select할때만 사용 => select 결과만 처리하는 것 (ResulstSet)과 같음-->
+    <resultMap id="footballResultMap" type="com.example.Ex02.dto.FootballDto">
+        <!--id : 프라이머리 키--> <!--나머지는  result에 작성-->
+        <id property="num" column="num"></id>
+        <result property="id" column="id"></result>
+        <result property="pw" column="pw"></result>
+        <result property="win" column="win"></result>
+        <result property="round16AsString" column="round16"></result>
+
+
+    </resultMap>
+
+    <!--삽입-->
+    <insert id="insertFootball" parameterType="com.example.Ex02.dto.FootballDto">
+        insert into football
+        values(fb_seq.nextval, #{id}, #{pw}, #{win}, #{round16AsString})
+    </insert>
+
+    <!--전체조회-->
+    <select id="selectAll" resultMap="footballResultMap">
+        select * from football
+        
+        <where>
+            <choose>
+                <!-- whatColum이 'all'이고 keyword 값이 null도 아니고 빈문자열도 아닐 때 실행 -->
+                <when test="whatColumn=='all' and keyword != null and keyword != ''">
+                    <!--id, win, round16 컬럼에 keyword가 포함되어 있는지 확인-->
+                    id like '%' || #{keyword} || '%' or
+                    win like '%' || #{keyword} || '%' or
+                    round16 like '%' || #{keyword} || '%'
+                </when>
+
+                <!-- 특정 컬럼 검색 -->
+                <!-- whatColumn이 null이 아니고 'all'이 아니며 keyword가 null/빈문자가 아닐 때 실행 -->
+                <when test="whatColumn !=null and whatColumn != 'all' and keyword !=null and keyword !=''">
+                    ${whatColumn} like '%' || #{keyword} || '%'
+
+                    <!--whatColumn SQL 구문에 그대로 삽입 -->
+                    <!--keyword 값 바인딩-->
+                </when>
+            </choose>
+        </where>
+        order by num desc
+        offset #{offset} rows fetch next #{limit} rows only
+
+    </select>
+    <!--검색어가 포함된 레코드 개수-->
+    <select id="getCount" resultType="int">
+        select count(*)
+        from football
+
+        <where>
+            <choose>
+                <!-- whatColum이 'all'이고 keyword 값이 null도 아니고 빈문자열도 아닐 때 실행 -->
+                <when test="whatColumn=='all' and keyword != null and keyword != ''">
+                    <!--id, win, round16 컬럼에 keyword가 포함되어 있는지 확인-->
+                    id like '%' || #{keyword} || '%' or
+                    win like '%' || #{keyword} || '%' or
+                    round16 like '%' || #{keyword} || '%'
+                </when>
+
+                <!-- 특정 컬럼 검색 -->
+                <!-- whatColumn이 null이 아니고 'all'이 아니며 keyword가 null/빈문자가 아닐 때 실행 -->
+                <when test="whatColumn !=null and whatColumn != 'all' and keyword !=null and keyword !=''">
+                    ${whatColumn} like '%' || #{keyword} || '%'
+
+                    <!--whatColumn SQL 구문에 그대로 삽입 -->
+                    <!--keyword 값 바인딩-->
+                </when>
+            </choose>
+        </where>
+    </select>
+
+
+    <!--상세조회-->
+    <select id="findByNum" resultMap="footballResultMap">
+        select * from football
+        where num = #{num}
+        order by num
+    </select>
+
+    <!--수정-->
+    <update id="updateFootball" parameterType="com.example.Ex02.dto.FootballDto">
+        update football set
+        pw = #{pw}, win=#{win}, round16=#{round16AsString}
+        where num = #{num}
+    </update>
+
+    <!--삭제-->
+    <delete id="deleteFootball" parameterType="com.example.Ex02.dto.FootballDto">
+        delete from football where num = #{num}
+    </delete>
+</mapper>
+
+<!--
+    ResultSet rs;
+    while(re.next()){
+    rs.xxx
+
+    ..
+
+
+-->

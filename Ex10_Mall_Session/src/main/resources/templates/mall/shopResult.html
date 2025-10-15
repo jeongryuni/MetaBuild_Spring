@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>주문 상세 내역</title>
+    <style>
+        h2 { text-align: center; margin: 20px 0; }
+        table { width: 700px; margin: auto; border-collapse: collapse; text-align: center; }
+        th, td { border: 1px solid #666; padding: 6px; }
+        th { background: #f0f0f0; }
+    </style>
+</head>
+<body>
+<h2>주문 상세 내역 : <span th:text="${oid}"></span></h2>
+
+<table>
+    <!-- 고객명 / 주문번호 -->
+    <tr>
+        <td colspan="2">고객명 :
+         <span th:text="${session.loginInfo.name}"> </span>
+        </td>
+        <td colspan="3">주문번호(송장번호) :
+            <span th:text="${oid}"></span>
+        </td>
+
+    </tr>
+
+    <!-- 배송지 -->
+    <tr>
+        <td>배송지</td>
+        <td colspan="4" th:text="${session.loginInfo.address}"></td>
+    </tr>
+
+    <!-- 헤더 -->
+    <tr>
+        <th>순번</th>
+        <th>상품명(상품번호)</th>
+        <th>수량</th>
+        <th>단가</th>
+        <th>금액</th>
+    </tr>
+
+    <!-- 데이터 반복 -->
+    <tr th:each="list, stat : ${lists}">
+        <td th:text="${stat.count}"></td> <!-- 순번 -->
+        <td>
+            <span th:text="${list.pname}"></span>
+            (<span th:text="${list.pnum}"></span>)
+        </td>
+        <td th:text="${list.qty}"></td>
+        <td th:text="${list.price}"></td>
+        <td th:text="${list.amount}"></td>
+    </tr>
+</table>
+</body>
+</html>

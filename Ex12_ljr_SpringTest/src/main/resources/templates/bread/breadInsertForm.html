@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>breadInsertForm</title>
+</head>
+
+<style>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            font-family: "Noto Sans KR", sans-serif;
+        }
+
+        h2 {
+            text-align: center;
+            color: #121212;
+            margin-top: 30px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 1200px;
+            margin: 20px auto;
+            border-radius: 10px;
+            overflow: hidden;
+            font-size: 16px;
+        }
+
+        th {
+            background-color: #121212;
+            color: #ffffff;
+            text-align: center;
+            border: none;
+            width: 200px;
+        }
+
+        th, td {
+            padding: 14px 20px;
+        }
+
+        td {
+            border-bottom: 1px solid #121212;
+        }
+
+     input[type="text"]{
+        border: 2px solid #ccc;
+        padding: 6px 10px;
+        border-radius: 4px;
+        outline: none;
+    }
+
+    select {
+        padding: 6px 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 15px;
+        outline: none;
+    }
+
+
+    .checkCode {
+        background-color: #121212;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        padding: 7px 16px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .checkCode:hover {
+        background-color: #7F5539;
+    }
+
+    .description-text{
+        width:1000px;
+    }
+
+    .error-msg{
+        color : red;
+        pont-size: 12px;
+    }
+    input[type="text"].error-border {
+        border: 2px solid red;
+    }
+    .bt-class{
+        background-color : #121212;
+        text-align: center;
+    }
+    .bt-class input[type="submit"],
+    .bt-class button{
+             background-color: #ffffff;
+             padding: 8px 16px;
+             color: #121212;
+             border: 1px solid transparent;
+             width:100px;
+             font-weight: bold;
+             border-radius: 4px;
+             cursor: pointer;
+    }
+
+    .bt-class input[type="submit"]:hover,
+    .bt-class button:hover {
+            background-color: #121212;
+            color: #ffffff;
+            border: 1px solid #121212;
+}
+
+    input[type="date"] {
+        padding: 6px 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 15px;
+        color: #333;
+        background-color: #fff;
+        cursor: pointer;
+    }
+
+    input[type="date"]:hover {
+        border-color: #7F5539;
+    }
+
+    input[type="date"]:focus {
+        border-color: #7F5539;
+}
+
+</style>
+
+<script>
+    let isChecked = false;
+    let CodeAvailable = false;
+
+    function checkCode(){
+        const codeValue = document.getElementById("codeInput").value;
+
+        if(codeValue == ''){
+            alert('코드를 입력하세요.');
+            return;
+        }
+
+        fetch("/checkCode?code=" + encodeURIComponent(codeValue))
+            .then(response => response.text())
+            .then(result => {
+                isChecked = true;
+                if(result == "duplicate"){
+                    alert("이미 사용중인 코드입니다")
+                    let CodeAvailable = false;
+                }else{
+                    alert("사용 가능한 코드 입니다.")
+                    let CodeAvailable = true;
+                }
+
+            })
+            .catch(error => {
+                console.log("에러발생", error);
+            });
+    }// checkCode
+
+    // sumbit 버튼 클릭시 중복체크 우선
+    function validateForm(){
+        if(isChecked == false){
+            alert("코드 중복체크를 먼저 해주세요")
+            return false;
+        }
+    }
+
+</script>
+
+
+<!--body-->
+<body>
+<h2>상품 정보 추가</h2>
+<form action="breadInsertProc" th:object="${bDto}" method="post" onsubmit="return validateForm()">
+<table>
+    <tr>
+        <th>상품명</th>
+        <td>
+            <input type="text" th:field="*{name}" oninput="resetCodeCheck" th:classappend="${#fields.hasErrors('name')}? 'error-border' : ''">
+            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error-msg"></div>
+        </td>
+    </tr>
+    <tr>
+        <th>고유코드</th>
+        <td>
+            <input type="text" id="codeInput" th:field="*{code}"  th:classappend="${#fields.hasErrors('code')}? 'error-border' : ''">
+            <input type="button" value="중복체크" onclick="checkCode()" class="checkCode">
+            <div th:if="${#fields.hasErrors('code')}" th:errors="*{code}" class="error-msg"></div>
+        </td>
+    </tr>
+    <tr>
+        <th>설명</th>
+        <td>
+            <input type="text" th:field="*{description}" class="description-text" th:classappend="${#fields.hasErrors('description')}? 'error-border' : ''">
+            <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="error-msg"></div>
+        </td>
+    </tr>
+    <tr>
+        <th>재료 선택</th>
+        <td>
+            <span th:each="in : ${ingredientsArr}">
+            <input type="checkbox" th:field="*{ingredients}" th:value="${in}">
+                <span th:text="${in}"></span>
+            </span>
+            <div th:if="${#fields.hasErrors('ingredients')}" th:errors="*{ingredients}" class="error-msg"></div>
+        </td>
+    </tr>
+    <tr>
+        <th>보관방법</th>
+        <td>
+            <span th:each="st : ${storageTypesArr}">
+                <input type="radio" th:field="*{storageType}" th:value="${st}" th:text="${st}">
+            </span>
+            <div th:if="${#fields.hasErrors('storageType')}" th:errors="*{storageType}" class="error-msg"></div>
+        </td>
+    </tr>
+    <tr>
+        <th>카테고리</th>
+        <td>
+            <select th:field="*{category}" th:classappend="${#fields.hasErrors('category')}? 'error-border' : ''">
+                <option th:text="선택" th:field="*{category}" value=""></option>
+                <option th:each="ca :${categoriesArr}" th:text="${ca}" th:value="${ca}"></option>
+            </select>
+            <div th:if="${#fields.hasErrors('category')}" th:errors="*{category}" class="error-msg"></div>
+        </td>
+    </tr>
+    <tr>
+        <th>가격</th>
+        <td>
+            <input type="text" th:field="*{price}" th:classappend="${#fields.hasErrors('price')}? 'error-border' : ''">
+            <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="error-msg"></div>
+        </td>
+    </tr>
+    <tr>
+        <th>재고</th>
+        <td>
+            <input type="text" th:field="*{stock}" th:classappend="${#fields.hasErrors('stock')}? 'error-border' : ''">
+            <div th:if="${#fields.hasErrors('stock')}" th:errors="*{stock}" class="error-msg"></div>
+        </td>
+    </tr>
+    <tr>
+        <th>출시일</th>
+        <td>
+            <input type="date" th:field="*{date}" th:classappend="${#fields.hasErrors('date')}? 'error-border' : ''">
+            <div th:if="${#fields.hasErrors('date')}" th:errors="*{date}" class="error-msg"></div>
+        </td>
+    </tr>
+
+        <td colspan="2" class="bt-class">
+            <input type="submit" value="입력완료">
+            <button type="button" value="목록" onclick="location.href='/breadList'">목록
+            </button>
+        </td>
+    </tr>
+</table>
+</form>
+</body>
+</html>

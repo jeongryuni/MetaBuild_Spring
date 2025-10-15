@@ -1,0 +1,37 @@
+server.port = 8080
+
+drop sequence bread_seq ;
+create sequence bread_seq start with 1 increment by 1 nocache ;
+
+drop table bread;
+create table bread(
+        id number(10) primary key, -- 아이디
+        name varchar2(100) not null, -- 빵 이름
+        code varchar2(20) unique not null, -- 빵 고유코드
+        description varchar2(255), -- 빵 설명
+        ingredients varchar2(255), -- 재료 (체크박스 선택값)
+        storage_type varchar2(20), -- 보관 방식(라디오)
+        category varchar2(20), -- 카테고리(select-option)
+        price number(10) not null, -- 가격
+        stock number(10) not null, -- 재고
+        release_date date DEFAULT sysdate
+);
+commit;
+
+insert into bread values(bread_seq.nextval, '크루아상', 'B001', '바삭한 버터 크루아상', '밀가루,버터,소금,우유', '상온', '간식빵', 2500, 40, sysdate);
+insert into bread values(bread_seq.nextval, '초코 머핀', 'B002', '달콤한 초콜릿 머핀', '밀가루,계란,초콜릿,버터', '상온', '디저트빵', 3000, 35, sysdate);
+insert into bread values(bread_seq.nextval, '단팥빵', 'B003', '전통 단팥이 든 빵', '밀가루,단팥,계란,버터', '상온', '간식빵', 2000, 50, sysdate);
+insert into bread values(bread_seq.nextval, '햄치즈 샌드위치', 'B004', '햄과 치즈가 들어간 식사용 샌드위치', '밀가루,햄,치즈,버터', '냉장', '식사빵', 4500, 25, sysdate);
+insert into bread values(bread_seq.nextval, '연유 식빵', 'B005', '달콤한 연유가 들어간 식빵', '밀가루,연유,버터,이스트', '상온', '식사빵', 3500, 30, sysdate);
+insert into bread values(bread_seq.nextval, '버터롤', 'B006', '부드러운 버터 향 롤빵', '밀가루,버터,이스트,소금', '상온', '간식빵', 1800, 45, sysdate);
+insert into bread values(bread_seq.nextval, '초코 데니시', 'B007', '겹겹이 초코가 들어간 데니시', '밀가루,초콜릿,버터,우유', '냉동', '디저트빵', 3200, 20, sysdate);
+insert into bread values(bread_seq.nextval, '마가린 도넛', 'B008', '마가린 풍미의 도넛', '밀가루,마가린,계란,설탕', '상온', '간식빵', 2200, 38, sysdate);
+insert into bread values(bread_seq.nextval, '우유 식빵', 'B009', '고소한 우유 풍미의 기본 식빵', '밀가루,우유,이스트,소금', '상온', '식사빵', 3000, 40, sysdate);
+insert into bread values(bread_seq.nextval, '소시지빵', 'B010', '탱글한 소시지가 들어간 빵', '밀가루,햄,계란,버터', '냉장', '식사빵', 2800, 25, sysdate);
+insert into bread values(bread_seq.nextval, '초코칩 쿠키', 'B011', '바삭한 초코칩 쿠키', '밀가루,초콜릿,버터,계란', '상온', '디저트빵', 1500, 60, sysdate);
+insert into bread values(bread_seq.nextval, '카스테라', 'B012', '부드러운 스펀지 케이크', '밀가루,계란,버터,우유', '상온', '디저트빵', 2700, 32, sysdate);
+insert into bread values(bread_seq.nextval, '소금빵', 'B013', '짭조름한 버터향 소금빵', '밀가루,소금,버터,이스트', '상온', '간식빵', 2300, 28, sysdate);
+insert into bread values(bread_seq.nextval, '크림빵', 'B014', '부드러운 크림이 가득한 빵', '밀가루,우유,계란,버터', '냉장', '디저트빵', 2500, 30, sysdate);
+insert into bread values(bread_seq.nextval, '햄마요빵', 'B015', '햄과 마요네즈가 어우러진 빵', '밀가루,햄,계란,마가린', '냉장', '식사빵', 2600, 22, sysdate);
+
+commit;

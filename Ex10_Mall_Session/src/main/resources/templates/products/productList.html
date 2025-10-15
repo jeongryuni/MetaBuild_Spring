@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>productList</title>
+</head>
+<style>
+    h2 {
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    th, td {
+    border: 1px solid #666;
+    padding: 6px;
+    text-align: center;
+    word-wrap: break-word;
+    }
+
+
+    th:nth-child(3), td:nth-child(3) {
+        width: 220px;
+    }
+
+    table {
+        margin: auto;
+        border: 1px solid #666;
+        border-collapse: collapse;
+        width: 750px;
+
+    }
+    .insertbt{
+        text-align: right;
+    }
+</style>
+<body>
+    productList.html<br>
+    <div th:insert ="~{fragment :: header}"></div>
+    <div class="Allbody">
+        <h2>상품 리스트 화면
+            ( <span th:text="${lists.size()}"></span> / <span th:text="${totalCount}"></span> )
+        </h2>
+        <table>
+            <tr>
+                <td colspan="6" style="text-align:center;">
+                    <!--검색창-->
+                    <form th:action="@{plist.prd}" method="get" class="search-box">
+                        <select name="whatColumn">
+                            <option value="all">전체검색</option>
+                            <option value="name">상품명</option>
+                            <option value="price">가격</option>
+
+                        </select>
+
+                        <input type="text" name="keyword">
+                        <input type="submit" value="검색">
+                    </form>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td colspan="9" class="insertbt">
+                    <input type="button" value="추가하기" onclick="location.href='/pinsert.prd'">
+                </td>
+            </tr>
+            <tr>
+                <th>상품번호</th>
+                <th>상품명</th>
+                <th>설명</th>
+                <th>가격</th>
+                <th>삭제</th>
+                <th>수정</th>
+            </tr>
+
+            <tr th:each="p : ${lists}">
+                <td th:text="${p.num}"></td>
+                <td>
+                    <a th:href="@{/pcontent.prd(num=${p.num}, page=${page}, whatColumn=${whatColumn}, keyword=${keyword})}"
+                       th:text="${p.name}"
+                    >
+
+                    </a>
+                </td>
+                <td th:text="${p.contents}"></td>
+                <td th:text="${p.price}"></td>
+                <td>
+                    <a th:href="@{/pdelete.prd(num=${p.num}, page=${page}, whatColumn=${whatColumn}, keyword=${keyword})}">삭제</a>
+                </td>
+                <td>
+                    <a th:href="@{/pupdate.prd(num=${p.num}, page=${page}, whatColumn=${whatColumn}, keyword=${keyword})}">수정</a>
+                </td>
+            </tr>
+            <tr>
+
+                <td colspan="6">
+                    <!--페이지 설정 -->
+                    <!--이전 1 2 3 다음-->
+                    <div class="pagination">
+                        <!--이전 버튼-->
+                        <span th:if="${page > 1}"> <!--내가 선택한 페이지가 1보다 크면 '이전'페이지 생김-->
+                            <a th:href="@{plist.prd(page=${page-1}, whatColumn=${whatColumn}, keyword=${keyword})}">이전</a> <!--페이지에서 하나 빼기-->
+                        </span>
+
+                                <!--현재 보고있는 페이지-->
+                       <span th:each="i : ${#numbers.sequence(1, totalPage)}">
+
+                        <!-- 현재 페이지가 아닌 경우: 번호에 링크를 걸어서 이동 가능 -->
+                        <a th:if="${i != page}"
+                           th:href="@{/plist.prd(page=${i}, whatColumn=${whatColumn}, keyword=${keyword})}"
+                           th:text="${i}"></a>
+
+                       <!-- 현재 페이지인 경우: 굵은 글씨 + 빨간색 표시 -->
+                        <span th:if="${i == page}"
+                              th:text="${i}"
+                              style="font-weight:bold;color:red"></span>
+                        </span>
+                        <!--다음 버튼-->
+                        <span th:if="${page < totalPage}">
+                        <a th:href="@{plist.prd(page=${page+1}, whatColumn=${whatColumn}, keyword=${keyword})}">다음</a>
+                         </span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

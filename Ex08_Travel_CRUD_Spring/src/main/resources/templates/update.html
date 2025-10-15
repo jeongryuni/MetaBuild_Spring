@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>update</title>
+
+    <style>
+        .err { color: red; }
+        h2 {
+           margin: auto;
+           text-align: center;
+       }
+
+       table {
+           width: 800px;
+           border-collapse: collapse;
+           margin: auto;
+       }
+        th{
+             text-align: center;
+        }
+    </style>
+</head>
+<body>
+<h2>수정폼</h2>
+<!--list.html 수정 클릭시 (whatColumn, keyword, page) updateproc에 요청처리-->
+<br>
+<form th:action="@{/updateProc}" th:object="${tDto}" method="post">
+    <!-- 수정 불가지만 값은 넘겨야 함 -->
+    <input type="hidden" th:field="*{num}">
+    <input type="hidden" th:field="*{name}">
+
+    <!--선택한 페이지에서 수정후 그 페이지에 유지를 위해 값 보냄-->
+    <!--Dto에 없는 필드명이기 떄문에 value로 값을 보내기-->
+    <input type="hidden"  name="whatColumn" th:value="${whatColumn}">
+    <input type="hidden" name="keyword" th:value="${keyword}">
+    <input type="hidden" name="page" th:value="${page}">
+
+    <table border="1" width="500">
+        <tr>
+            <th>번호</th>
+            <td th:text="*{num}"></td>
+        </tr>
+
+        <tr>
+            <th>이름</th>
+            <td th:text="*{name}"></td>
+        </tr>
+
+        <tr>
+            <th>나이</th>
+            <td>
+                <input type="text" th:field="*{age}">
+                <div th:if="${#fields.hasErrors('age')}" th:errors="*{age}" class="err"></div>
+            </td>
+        </tr>
+
+        <tr>
+            <th>관심지역</th>
+            <td>
+                <span th:each="a : ${areaArr}">
+                    <input type="checkbox" th:field="*{area}" th:value="${a}"> [[${a}]]
+                </span>
+                <div th:if="${#fields.hasErrors('area')}" th:errors="*{area}" class="err"></div>
+            </td>
+        </tr>
+
+        <tr>
+            <th>여행타입</th>
+            <td>
+                <span th:each="t : ${typeArr}">
+                    <input type="radio" th:field="*{style}" th:value="${t}"> [[${t}]]
+                </span>
+                <div th:if="${#fields.hasErrors('style')}" th:errors="*{style}" class="err"></div>
+            </td>
+        </tr>
+
+        <tr>
+            <th>가격</th>
+            <td>
+                <select th:field="*{price}">
+                    <option th:each="p:${priceArr}" th:value="${p}" th:text="${p}"></option>
+                </select>
+                <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="err"></div>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2" style="text-align:center;">
+                <input type="submit" value="수정하기"> <!--수정하기 눌렀을때 보던 페이지로 이동-->
+                <a href="list">목록보기</a>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

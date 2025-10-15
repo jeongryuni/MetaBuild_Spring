@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    title : <span th:text="${book.title}"></span><br>
+    author : <span th:text="${book.author}"></span><br>
+    price : <span th:text="${book.price}"></span><br>
+    publisher : <span th:text="${book.publisher}"></span><br>
+    bookstore : <span th:text="${book.bookstore}"></span><br>
+    <span th:each ="store : ${book.bookstore}" th:text="${store}">
+        <br>
+
+    </span>
+
+
+
+</head>
+<body>
+
+</body>
+</html>

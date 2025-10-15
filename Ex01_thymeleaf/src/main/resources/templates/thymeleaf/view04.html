@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+view04.html<p></p>
+
+<a href="/thymeleaf/ex01">예제 1로 이동</a><br>
+<a th:href="@{/thymeleaf/ex01}">예제 1로 이동</a><br>
+<a th:href="@{http://www.thymeleaf.org}">타임리프 페이지로 이동</a><br>
+
+<a th:href="@{/thymeleaf/ex05}">예제 5로 이동</a><br>
+<a th:href="@{/thymeleaf/ex05(param1='abc', param2='xyz')}">예제 5로 param1, param2를 가지고 이동</a><br>
+</body>
+</html>

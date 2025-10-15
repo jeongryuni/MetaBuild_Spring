@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    view03.html<br>
+
+    <table border="1">
+            <tr>
+                <th>상태값</th>
+                <th>번호</th>
+                <th>상품명</th>
+                <th>셜명</th>
+                <th>가격</th>
+            </tr>
+
+<!--        th:each = "변수, 상태변수:컬렉션"-->
+<!--        th:each = "변수 : 컬렉션"-->
+<!--        for(하나:컬렉션)-->
+            <tr th:each="itemDto : ${lists}">
+            <td th:text="${itemDtoStat.count}"></td>
+            <td th:text="${itemDto.no}"></td>
+            <td th:text="${itemDto.itemNm}"></td>
+            <td th:text="${itemDto.itemDetail}"></td>
+            <td th:text="${itemDto.price}"></td>
+        </tr>
+    </table>
+<br><br>
+<div th:each="num : ${#numbers.sequence(1,5,2)}">
+    <p th:text="${num}"></p>
+    <p th:text="${'index:' + numStat.index}"></p>
+    <p th:text="${'count' + numStat.count}"></p>
+    <p th:text="${'first' + numStat.first}"></p>
+    <p th:text="${'last' + numStat.last}"></p>
+    <p th:text="${'size' + numStat.size}"></p>
+    <hr>
+</div>
+</body>
+</html>

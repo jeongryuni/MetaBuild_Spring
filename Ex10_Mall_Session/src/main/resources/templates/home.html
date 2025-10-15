@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    home.html<br>
+    <p><a th:href="@{mlist.mb}" th:text="'회원 목록'"></a></p>
+    <p><a th:href="@{plist.prd}" th:text="'상품 목록'"></a></p>
+    <p><a th:href="@{login.mb}" th:text="'로그인'"></a></p>
+    <p><a th:href="@{logout.mb}" th:text="'로그아웃'"></a></p>
+    <p><a th:href="@{/order.mall}" th:text="'나의 주문 내역 보기'"></a></p>
+</body>
+</html>

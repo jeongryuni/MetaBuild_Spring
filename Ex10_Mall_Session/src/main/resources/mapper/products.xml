@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.Ex02.mapper.ProductsMapper">
+
+    <!--제품 전체조회-->
+    <select id="selectAll" parameterType="com.example.Ex02.dto.ProductsDto">
+        select *
+        from products
+
+        <where>
+            <choose>
+                <!--전체 검색-->
+                <when test="whatColumn == 'all' and keyword !=null and keyword !=''">
+                    name like '%' || #{keyword} || '%' or
+                    price like '%' || #{keyword} || '%'
+                </when>
+
+                <when test="whatColumn != null and whatColumn != 'all' and keyword != null and keyword !=''">
+                    ${whatColumn} like '%' || #{keyword}||  '%'
+                </when>
+            </choose>
+        </where>
+        order by num asc
+        offset #{offset} row fetch next #{limit} rows only
+    </select>
+
+    <!--검색어 조회-->
+    <select id="getCount" parameterType="int">
+        select count(*)
+        from products
+        <where>
+            <choose>
+                <!--전체 검색-->
+                <when test="whatColumn == 'all' and keyword !=null and keyword !=''">
+                    name like '%' || #{keyword} || '%' or
+                    price like '%' || #{keyword} || '%'
+                </when>
+
+                <when test="whatColumn != null and whatColumn != 'all' and keyword != null and keyword !=''">
+                    ${whatColumn} like '%' || #{keyword}||  '%'
+                </when>
+            </choose>
+        </where>
+    </select>
+
+    <!--삽입-->
+    <insert id="insertProduct" parameterType="com.example.Ex02.dto.ProductsDto">
+        insert into products (num, name, company, image, stock, price, contents, point, inputdate)
+        values(seqprod.nextval, #{name}, #{company}, #{image}, #{stock}, #{price}, #{contents}, #{point}, #{inputdate})
+    </insert>
+
+
+    <!--상세조회-->
+    <select id="findByNum" parameterType="com.example.Ex02.dto.ProductsDto">
+        select * from products
+        where num = #{num}
+    </select>
+
+    <!--수정-->
+    <update id="updateProduct"  parameterType="com.example.Ex02.dto.ProductsDto">
+        update products set
+        name= #{name},
+        company=#{company},
+        image=#{image},
+        stock=#{stock},
+        price=#{price},
+        contents=#{contents},
+        point=#{point}
+        where num = #{num}
+    </update>
+
+    <delete id="deleteProduct">
+        delete from products
+        where num = #{num}
+    </delete>
+
+
+    <!--상품의 재고수량 감소 table : products의 stock(재고)-->
+    <update id="updateStock">
+        update products set
+        stock = stock - #{stock}
+        where num = #{num}
+    </update>
+
+</mapper>

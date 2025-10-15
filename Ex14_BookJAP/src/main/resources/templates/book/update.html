@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/mylayout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <th:block layout:fragment="css">
+        <style>
+            .fieldError{
+                color : red;
+                font-size:12px;
+            }
+        </style>
+    </th:block>
+
+    <th:block layout:fragment="script">
+        <script th:inline="javascript">
+            $(document).ready(function(){
+                var bookstoreString = '[[${bookBean.bookstore}]]'; // 선택된 서점 문자열
+                var bookstoreList = $('input[name=bookstore]');    // 체크박스 목록
+                bookstoreList.each(function(){
+                    var curr = $(this).val();
+                    var index = bookstoreString.indexOf(curr);
+                    if(index != -1){
+                        $(this).prop('checked', true);
+                    }
+                });
+            });
+        </script>
+    </th:block>
+
+</head>
+<body>
+<div class="content" layout:fragment="content">
+    <h2>도서 수정</h2>
+    <form name="myform" method="post" action="/book/update" th:object="${bookBean}">
+        <input type="hidden" th:field="*{no}">
+        <input type="hidden" th:value="${size}" name="size">
+        <input type="hidden" th:value="${keyword}" name="keyword">
+        <input type="hidden" th:value="${page}" name="page">
+
+        <div class="form-group">
+            <b>제목</b>
+            <input type="text" class="form-control" th:field="*{title}" placeholder="제목을 입력하세요">
+            <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="fieldError"></p>
+        </div>
+
+        <div class="form-group">
+            <b>저자</b>
+            <input type="text" class="form-control" th:field="*{author}" placeholder="저자를 입력하세요">
+            <p th:if="${#fields.hasErrors('author')}" th:errors="*{author}" class="fieldError"></p>
+        </div>
+
+        <div class="form-group">
+            <b>출판사</b>
+            <input type="text" class="form-control" th:field="*{publisher}" placeholder="출판사를 입력하세요">
+            <p th:if="${#fields.hasErrors('publisher')}" th:errors="*{publisher}" class="fieldError"></p>
+        </div>
+
+        <div class="form-group">
+            <b>가격</b>
+            <input type="text" class="form-control" th:field="*{price}" placeholder="가격을 입력하세요">
+            <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="fieldError"></p>
+        </div>
+
+        <div class="form-group">
+            <b>입고일</b>
+            <input type="date" class="form-control" th:field="*{buy}" placeholder="입고일을 입력하세요">
+            <p th:if="${#fields.hasErrors('buy')}" th:errors="*{buy}" class="fieldError"></p>
+        </div>
+
+        <div class="form-group">
+            <b>배송비</b>
+            <div class="form-control">
+                <div class="form-check-inline" th:each="k:${kindArr}">
+                    <input type="radio" class="form-check-input" th:field="*{kind}" th:value="${k}"><label th:text="${k}"></label>
+                </div>
+            </div>
+            <p th:if="${#fields.hasErrors('kind')}" th:errors="*{kind}" class="fieldError"></p>
+        </div>
+        <div class="form-group">
+            <b>구입가능 서점</b>
+            <div class="form-control">
+                <div class="form-check-inline" th:each="b:${bookstoreArr}">
+                    <input type="checkbox" class="form-check-input" th:field="*{bookstore}" th:value="${b}"><label th:text="${b}"></label>
+                </div>
+            </div>
+            <p th:if="${#fields.hasErrors('bookstore')}" th:errors="*{bookstore}" class="fieldError"></p>
+        </div>
+        <div class="form-group">
+            <b>보유수량</b>
+            <select class="form-control" th:field="*{count}">
+                <option value="0">선택하세요</option>
+                <option th:each="i:${#numbers.sequence(1,5)}" th:value="${i}" th:text="${i}"></option>
+            </select>
+            <p th:if="${#fields.hasErrors('count')}" th:errors="*{count}" class="fieldError"></p>
+        </div>
+        <button type="submit" class="btn btn-primary">수정완료</button>
+        <button type="reset" class="btn btn-primary" th:onclick="|location.href='@{/blist}'|">취소</button>
+    </form>
+</div>
+</body>
+</html>

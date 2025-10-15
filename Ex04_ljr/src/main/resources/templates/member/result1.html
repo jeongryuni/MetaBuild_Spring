@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>result1</title>
+</head>
+<body>
+    member/result1.html<br>
+
+    이름 : <span th:text="${param.name}"></span>
+    나이 : <span th:text="${param.age}"></span>
+    취미 : <span th:text="${param.hobby}"></span>
+    <br>
+    <br>
+    이름 : <span th:text="${rname}"></span><br>
+    나이 : <span th:text="${rage}"></span><br>
+    취미 : <span th:each ="rh, stat : ${rhobby}">
+              <span th:text="${rh}"></span>
+              <span th:if="${not stat.last}">, </span>
+          </span>
+    <br>
+    <br>
+    이름 : <span th:text="${mname}"></span><br>
+    나이 : <span th:text="${mage}"></span><br>
+    취미 : <span th:each ="mh, stat: ${mhobby}"
+                th:text="${mh + (stat.last? '': ', ')}"></span><br>
+
+</body>
+</html>

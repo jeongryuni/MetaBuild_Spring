@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/mylayout}">
+<head>
+    <meta charset="UTF-8">
+    <title>영화 등록 페이지</title>
+    <th:block layout:fragment="css">
+        <style>
+            .fieldError {
+                color: red;
+                font-size: 0.9em;
+                margin-top: 4px;
+            }
+        </style>
+    </th:block>
+    <th:block layout:fragment="script">
+        <script th:inline="javascript">
+            $(document).ready(function(){
+                var genreString = '[[${movieBean.genre}]]';
+                var genreList = $('input[name=genre]');
+
+                genreList.each(function(){
+                    var curr = $(this).val();
+                    if (genreString.indexOf(curr) !== -1) {
+                        $(this).attr('checked', true);
+                    }
+                });
+            });
+        </script>
+    </th:block>
+
+</head>
+<body>
+<div class="content" layout:fragment="content">
+    <h2>영화 등록</h2>
+
+    <form name="myform" method="post" action="/movie/insert" th:object="${movieBean}">
+
+        <div class="form-group">
+            <b>아이디</b>
+            <input type="text" class="form-control" th:field="*{id}" placeholder="아이디를 입력하세요">
+            <p th:if="${#fields.hasErrors('id')}" th:errors="*{id}" class="fieldError"></p>
+        </div>
+
+        <div class="form-group">
+            <b>이름</b>
+            <input type="text" class="form-control" th:field="*{name}" placeholder="이름을 입력하세요">
+            <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError"></p>
+        </div>
+
+        <div class="form-group">
+            <b>나이</b>
+            <input type="number" class="form-control" th:field="*{age}" placeholder="나이를 입력하세요">
+            <p th:if="${#fields.hasErrors('age')}" th:errors="*{age}" class="fieldError"></p>
+        </div>
+
+        <div class="form-group">
+            <b>좋아하는 장르</b>
+            <div class="form-control">
+                <div class="form-check-inline" th:each="g : ${genreArr}">
+                    <input type="checkbox" th:field="*{genre}" th:value="${g}"> [[${g}]]
+                </div>
+            </div>
+            <p th:if="${#fields.hasErrors('genre')}" th:errors="*{genre}" class="fieldError"></p>
+        </div>
+
+        <div class="form-group">
+            <b>즐겨보는 시간대</b>
+            <select class="form-control" th:field="*{time}">
+                <option value="">--- 선택해 주세요 ---</option>
+                <option th:each="t : ${timeArr}" th:value="${t}" th:text="${t}"></option>
+            </select>
+            <p th:if="${#fields.hasErrors('time')}" th:errors="*{time}" class="fieldError"></p>
+        </div>
+
+        <div class="form-group">
+            <b>동반 관객수</b>
+            <div class="form-control">
+                <div class="form-check-inline" th:each="p : ${partnerArr}">
+                    <input type="radio" th:field="*{partner}" th:value="${p}"> [[${p}]]
+                </div>
+            </div>
+            <p th:if="${#fields.hasErrors('partner')}" th:errors="*{partner}" class="fieldError"></p>
+        </div>
+
+        <div class="form-group">
+            <b>개선사항</b>
+            <textarea class="form-control" rows="3" th:field="*{memo}" placeholder="개선사항을 입력하세요"></textarea>
+            <p th:if="${#fields.hasErrors('memo')}" th:errors="*{memo}" class="fieldError"></p>
+        </div>
+
+        <button type="submit" class="btn btn-primary">영화 등록</button>
+        <button type="reset" class="btn btn-primary" th:onclick="|location.href='@{/mlist}'|">취소</button>
+    </form>
+</div>
+</body>
+</html>
+

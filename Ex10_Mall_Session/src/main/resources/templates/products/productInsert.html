@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>insert.prd</title>
+</head>
+
+<h2>상품 추가</h2>
+<body>
+상품 insert.html<br>
+<div th:insert ="~{fragment :: header}"></div>
+<form th:action="@{/pinsertProc.prd}" th:object="${pDto}" method="post" enctype="multipart/form-data" >
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>상품명</th>
+            <td>
+                <input type="text" th:field="*{name}">
+                <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color:red">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>제조회사</th>
+            <td>
+                <input type="text" th:field="*{company}" oninput="resetIdCheck()">
+                <div th:if="${#fields.hasErrors('company')}" th:errors="*{company}" style="color:red">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>가격</th>
+            <td><input type="text" th:field="*{price}">
+                <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}" style="color:red"></div>
+            </td>
+
+        </tr>
+        <tr>
+            <th>재고수량</th>
+            <td>
+                <input type="text" th:field="*{stock}">
+                <div th:if="${#fields.hasErrors('stock')}" th:errors="*{stock}" style="color:red">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>적립포인트</th>
+            <td>
+                <input type="text" th:field="*{point}">
+                <div th:if="${#fields.hasErrors('point')}" th:errors="*{point}" style="color:red">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>설명</th>
+            <td>
+                <input type="text" th:field="*{contents}">
+                <div th:if="${#fields.hasErrors('contents')}" th:errors="*{contents}" style="color:red">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <!--file-->
+            <th>상품이미지</th>
+            <td><input type="file" th:field="*{file}">
+                <div th:if="${#fields.hasErrors('file')}" th:errors="*{file}" style="color:red">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>입고일자</th>
+            <td><input type="date" th:field="*{inputdate}">
+                <div th:if="${#fields.hasErrors('inputdate')}" th:errors="*{inputdate}" style="color:red">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align:center;">
+                <input type="submit" value="추가하기">
+                <input type="button" value="목록으로" onclick="location.href='/plist.prd'">
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

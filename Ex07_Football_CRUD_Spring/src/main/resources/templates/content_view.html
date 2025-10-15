@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>content_view</title>
+</head>
+<body>
+        content_view<br>
+        <h2>상세보기</h2>
+
+            <table border="1">
+                <tr>
+                    <td>번호</td>
+                    <td th:text="${fDto.num}"></td>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>아이디</td>
+                    <td th:text="${fDto.id}"></td>
+                </td>
+
+                </tr>
+                <tr>
+                    <td>비밀번호</td>
+                    <td th:text="${fDto.pw}">
+
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>우승 예상 국가</td>
+                    <td th:text="${fDto.win}"></td>
+
+                </tr>
+
+                <tr>
+                    <td>16강 예상 국가</td>
+                    <td th:text="${fDto.round16AsString}"></td>
+
+                </tr>
+
+                <tr>
+                    <td colspan="2">
+
+                    <!--번호담아서 넘기기-->
+                    <!--
+                    /modify?num=3
+                    /delete?num=3
+                    -->
+                    <a th:href="@{/update(num=${fDto.num},page=${page}, whatColumn=${whatColumn}, keyword=${keyword})}">수정</a> |
+                    <a th:href="@{/delete(num=${fDto.num},page=${page}, whatColumn=${whatColumn}, keyword=${keyword})}">삭제</a> |
+                    <a th:href="@{/list(page=${page})}">목록</a>
+
+
+                </td>
+                </tr>
+
+            </table>
+        </form>
+
+
+
+</body>
+</html>

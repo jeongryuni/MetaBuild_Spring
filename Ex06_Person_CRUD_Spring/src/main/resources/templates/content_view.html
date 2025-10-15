@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>content_view</title>
+</head>
+<body>
+        content_view.html<br>
+        <form th:action="@{/modify}" method="post">
+            <input type="hidden" name="num" th:value="${pDto.num}"/>
+        <table border="1" width="500">
+            <tr>
+                <td>번호</td>
+                <td th:text="${pDto.num}"></td>
+            </tr>
+            <tr>
+                <td>아이디</td>
+                <td th:text="${pDto.id}"></td>
+            </tr>
+
+            <tr>
+                <td>이름</td>
+                <td><input type="text" name="name" th:value="${pDto.name}"></td>
+            </tr>
+
+            <tr>
+                <td>나이</td>
+                <td><input type="text" name="age" th:value="${pDto.age}"></td>
+            </tr>
+
+            <!--submit-->
+            <tr>
+                <td colspan="2">
+                    <input type="submit" value="수정">
+
+                    <a href="list">목록보기</a>
+                    <a th:href="@{/delete(num=${pDto.num})}">삭제</a>
+                </td>
+            </tr>
+        </table>
+        </form>
+</body>
+</html>

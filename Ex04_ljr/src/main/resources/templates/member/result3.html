@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>result3</title>
+</head>
+<body>
+        member/result3.html<br>
+
+        이름 : <span th:text="${mavMember.name}"></span><br>
+        나이 : <span th:text="${mavMember.age}"></span><br>
+        취미 : <span th:each ="h, stat : ${mavMember.hobby}"
+                   th:text="${h + (stat.last ? '':', ')}"></span>
+
+</body>
+</html>

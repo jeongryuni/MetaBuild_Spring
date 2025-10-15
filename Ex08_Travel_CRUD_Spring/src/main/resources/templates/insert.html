@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>여행 정보 입력</title>
+    <style>
+        .err { color: red; }
+        h2 {
+           margin: auto;
+           text-align: center;
+       }
+
+       table {
+           width: 800px;
+           border-collapse: collapse;
+           margin: auto;
+       }
+        th{
+             text-align: center;
+        }
+    </style>
+</head>
+<body>
+<h2>여행 정보 입력</h2>
+<form th:action="@{/insertProc}" th:object="${tDto}" method="post">
+    <table border="1" width="500">
+        <tr>
+            <th>이름</th>
+            <td>
+                <input type="text" th:field="*{name}"><br>
+                <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="err"></div>
+            </td>
+        </tr>
+        <tr>
+            <th>나이</th>
+            <td>
+                <input type="number" th:field="*{age}"><br>
+                <div th:if="${#fields.hasErrors('age')}" th:errors="*{age}" class="err"></div>
+            </td>
+        </tr>
+        <tr>
+            <th>관심지역</th>
+            <td>
+                <input type="checkbox" th:field="*{area}" value="유럽">유럽
+                <input type="checkbox" th:field="*{area}" value="동남아">동남아
+                <input type="checkbox" th:field="*{area}" value="일본">일본
+                <input type="checkbox" th:field="*{area}" value="중국">중국
+                <div th:if="${#fields.hasErrors('area')}" th:errors="*{area}" class="err"></div>
+            </td>
+        </tr>
+        <tr>
+            <th>여행타입</th>
+            <td>
+                <input type="radio" th:field="*{style}" value="패키지">패키지
+                <input type="radio" th:field="*{style}" value="크루즈">크루즈
+                <input type="radio" th:field="*{style}" value="자유여행">자유여행
+                <input type="radio" th:field="*{style}" value="골프여행">골프여행
+                <div th:if="${#fields.hasErrors('style')}" th:errors="*{style}" class="err"></div>
+            </td>
+        </tr>
+        <tr>
+            <th>가격</th>
+            <td>
+                <select th:field="*{price}">
+                    <option value="">-- 선택하세요 --</option>
+                    <option value="0~100">0~100</option>
+                    <option value="200~300">200~300</option>
+                    <option value="300~400">300~400</option>
+                </select>
+                <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="err"></div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align:center;">
+                <input type="submit" value="추가하기">
+                <a href="list">목록보기</a>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

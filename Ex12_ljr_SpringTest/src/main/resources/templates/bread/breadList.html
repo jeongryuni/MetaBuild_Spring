@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>BreadHome</title>
+</head>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        background-color : #ffffff;
+    }
+    table {
+        border-collapse: collapse;
+        width: 1400px;
+        margin: 20px auto;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    th{
+        background-color : #121212;
+        color: #f0f0f0;
+        border:none;
+    }
+    th, td {
+          padding: 14px;
+    }
+    td{
+        border-bottom: 1px solid #121212;
+    }
+    .insertBread {
+        text-align: right;
+    }
+
+    /* 검색 */
+    .search-form {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 10px;
+        padding: 10px 0;
+    }
+
+    .search-select {
+        padding: 6px 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 15px;
+        outline: none;
+    }
+
+    .search-input {
+        width: 250px;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 15px;
+        outline: none;
+    }
+
+    .search-input:focus {
+        border-color: #121212;
+    }
+
+    .search-btn {
+        background-color: #121212;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        padding: 7px 16px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .search-btn:hover {
+        background-color: #7F5539;
+    }
+
+    .insert-btn {
+        background-color: #7F5539;
+        color: white;
+        padding: 8px 14px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .insert-btn:hover {
+        background-color: #5b3e28;
+    }
+
+    .col-center {
+        text-align: center;
+    }
+    a {
+        color: #121212;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    a:hover {
+        color: #7F5539;
+    }
+
+</style>
+<body>
+<h2>빵 리스트 홈</h2>
+        <table>
+            <tr>
+                <td colspan="4" style="text-align:left;">
+                    <form th:action="@{breadList}" method="get" class="search-form">
+                        <select name="whatColumn" class="search-select">
+                            <option value="all">전체검색</option>
+                            <option value="name">상품명</option>
+                            <option value="code">고유코드</option>
+                            <option value="category">카테고리</option>
+                        </select>
+                        <input type="text" name="keyword" class="search-input" placeholder="검색어를 입력하세요">
+                        <input type="submit" value="검색" class="search-btn">
+                    </form>
+                </td>
+                <td class="insertBread" colspan="4">
+                    <a th:href="@{/breadInsert}" class="insert-btn">빵정보 추가</a>
+                </td>
+            </tr>
+
+            <tr>
+                <th>번호</th>
+                <th>상품명</th>
+                <th>고유코드</th>
+                <th>설명</th>
+                <th>카테고리</th>
+                <th>출고일</th>
+                <th>수정</th>
+                <th>삭제</th>
+            </tr>
+            <tr th:each="list : ${lists}">
+                <td class="col-center" th:text="${list.id}">번호</td>
+                <td><a th:href="@{/breadContentView(id=${list.id}, page=${page}, whatColumn=${whatColumn}, keyword=${keyword})}" th:text="${list.name}"></a></td>
+                <td class="col-center" th:text="${list.code}"></td>
+                <td th:text="${list.description}"></td>
+                <td th:text="${list.category}"></td>
+                <td class="col-center" th:text="${list.date}"></td>
+                <td class="col-center"><a th:href="@{/breadUpdateForm(id=${list.id}, page=${page}, whatColumn=${whatColumn}, keyword=${keyword})}">수정</a></td>
+                <td class="col-center"><a th:href="@{/breadDeleteProc(id=${list.id}, page=${page}, whatColumn=${whatColumn}, keyword=${keyword})}">삭제</a></td>
+            </tr>
+
+            <tr>
+                <td colspan="12" style="border-bottom:none;">
+                <div id="page">
+                    <!--이전버튼-->
+                    <span th:if="${page > 1}">
+                        <a th:href="@{breadList(page=${page-1}, whatColumn=${whatColumn}, keyword=${keyword})}">이전</a>
+                    </span>
+                    <!--현재페이지-->
+                    <span th:each = "i:${#numbers.sequence(1, totalPage)}">
+                            <a th:if="${i != page}"
+                               th:href="@{breadList(page=${i}, whatColumn=${whatColumn}, keyword=${keyword})}"
+                               th:text="${i}">
+                            </a>
+                            <!-- 현재 페이지인 경우: 굵은 글씨 + 빨간색 표시 -->
+                            <span th:if="${i == page}"
+                                  th:text="${i}"
+                                     style="font-weight:bold;color:red">
+                            </span>
+                    </span>
+
+                    <!--다음 -->
+                    <span th:if="${page < totalPage}">
+                        <a th:href="@{breadList(page=${page+1}, whatColumn=${whatColumn}, keyword=${keyword})}">다음</a>
+                    </span>
+                </div>
+                </td>
+            </tr>
+        </table>
+</body>
+</html>
