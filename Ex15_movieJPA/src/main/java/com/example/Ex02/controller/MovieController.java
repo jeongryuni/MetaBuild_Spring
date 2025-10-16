@@ -9,10 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -121,12 +118,12 @@ public class MovieController {
         return "movie/detail";
     }
 
-    // 수정폼으로 이동
-    @GetMapping(value = "movie/update")
-    public String update(@ModelAttribute("movieBean") MovieBean movieBean, Model model,
-                         @RequestParam("num")int num,
-                         @RequestParam(defaultValue = "0") int page,
-                         @RequestParam(defaultValue = "3") int size,
+    // 수정폼으로 이동 (keyword는 필수조건이아님)
+    @GetMapping(value = "movie/update/{num}/{page}/{size}")
+    public String update(Model model,
+                         @PathVariable("num")int num,
+                         @PathVariable("page") int page,
+                         @PathVariable("size") int size,
                          @RequestParam(required = false) String keyword){
 
         MovieEntity movieEntity = movieService.getMovieByNum(num);
@@ -142,7 +139,6 @@ public class MovieController {
     // 수정처리
     @PostMapping(value = "/movie/updateProc")
     public String updateProc(@Valid @ModelAttribute("movieBean")MovieBean movieBean,BindingResult br, Model model,
-                             @RequestParam("num")int num,
                              @RequestParam(defaultValue = "0") int page,
                              @RequestParam(defaultValue = "3") int size,
                              @RequestParam(required = false) String keyword) {
@@ -171,9 +167,6 @@ public class MovieController {
         @RequestParam(defaultValue = "3") int size,
         @RequestParam(required = false) String keyword){
 
-        model.addAttribute("page", page);
-        model.addAttribute("size", size);
-        model.addAttribute("keyword", keyword);
         movieService.deleteMovie(num);
 
         Page<MovieEntity> movielist = movieService.getMovieEntity(page, size, keyword);
@@ -185,7 +178,6 @@ public class MovieController {
     }
 
 
-
     // 다중 삭제
     @PostMapping(value = "/deleteSelect")
     public String deleteSelect(
@@ -195,9 +187,6 @@ public class MovieController {
             @RequestParam(defaultValue = "3") int size,
             @RequestParam(required = false) String keyword
     ){
-        model.addAttribute("page", page);
-        model.addAttribute("size", size);
-        model.addAttribute("keyword", keyword);
 
         // 여러 개 삭제 반복 수행 단일삭제에서 for문만 추가
         for (int num : nums) {

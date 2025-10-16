@@ -56,10 +56,10 @@
     </table>
 
     <div style="text-align:center;">
-        <!-- ✅ 목록으로 돌아가기 -->
+        <!--  목록으로 돌아가기 -->
         <a th:href="@{/mlist(page=${page}, size=${size}, keyword=${keyword})}" class="btn btn-secondary">목록으로</a>
 
-        <!-- ✅ 수정 / 삭제 버튼 -->
+        <!--  수정 / 삭제 버튼 -->
         <a th:href="@{/movie/update(num=${movie.num}, page=${page}, size=${size}, keyword=${keyword})}" class="btn btn-warning">수정</a>
         <a th:href="@{/movie/delete(num=${movie.num}, page=${page}, size=${size}, keyword=${keyword})}" class="btn btn-danger"
            onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a>

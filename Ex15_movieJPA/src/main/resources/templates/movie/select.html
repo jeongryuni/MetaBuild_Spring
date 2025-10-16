@@ -12,7 +12,6 @@
 
 <th:block layout:fragment="script">
     <script th:inline="javascript">
-
         // (1) 전체 선택 / 해제 기능
         function allCheck(source){
              const checkboxes = document.getElementsByName("row");
@@ -33,12 +32,10 @@
                 break;
             }
         }
-
         if (!flag) {
             alert("체크박스를 하나라도 선택하세요");
             return;
         }
-
         if (!confirm("정말 삭제하시겠습니까?")) return;
         document.myform.submit();
     }
@@ -97,8 +94,17 @@
                 <td th:text="${movie.partner}"></td>
                 <td th:text="${movie.memo}"></td>
                 <td>
-                    <a th:href="@{/movie/update(num=${movie.num}, page=${page}, size=${size}, keyword=${keyword})}"
-                       class="btn btn-sm btn-outline-secondary">수정</a>
+                    <!-- 키워드가 있을 때 -->
+                    <div th:if="${keyword != null}">
+                        <a th:href="@{|/movie/update/${movie.num}/${page}/${size}?keyword=${keyword}|}"
+                           class="btn btn-sm btn-outline-secondary">수정</a>
+                    </div>
+
+                    <!-- 키워드가 없을 때 -->
+                    <div th:if="${keyword == null}">
+                        <a th:href="@{|/movie/update/${movie.num}/${page}/${size}|}"
+                           class="btn btn-sm btn-outline-secondary">수정</a>
+                    </div>
                 </td>
                 <td>
                     <a th:href="@{/movie/delete(num=${movie.num}, page=${page}, size=${size}, keyword=${keyword})}"
